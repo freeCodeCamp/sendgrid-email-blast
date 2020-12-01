@@ -1,46 +1,62 @@
-# Project Name
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+# SendGrid Testing
 
-Project Description
+Testing the SendGrid API and email fetch scripts.
 
-## Live Version
+# Using the Tool
 
-This page is not yet deployed.
-<!--This page is currently deployed. [View the live website.]()-->
+Using this tool will require an initial setup.
 
-## Feedback and Bugs
+## Initial Setup
 
-If you have feedback or a bug report, please feel free to open a GitHub issue!
+First, ensure you have the latest version of Node (14 LTS) installed. Then run the command to install the requisite packages:
 
-## Contributing
+```bash
+npm install
+```
 
-If you would like to contribute to the project, you may create a Pull Request containing your proposed changes and we will review it as soon as we are able! Please review our [contributing guidelines](CONTRIBUTING.md) first.
+This project is built with TypeScript, so the files need to be built. You can compile the files with:
 
-## Code of Conduct
+```bash
+npm run build
+```
 
-Before interacting with our community, please read our [Code of Conduct](CODE_OF_CONDUCT.md).
+You will also need to configure your environment variables. You can copy the `sample.env` to a `.env` file, or create the `.env` file from scratch. Then, set the following values:
 
-## Questions
+- `MONGO_URI`: This is the full connection string for your MongoDB instance.
+- `MONGO_DB`: This is the name of the database to use.
+- `MONGO_USER`: This is the username to use for MongoDB authentication.
+- `MONGO_PASSWORD`: This is the password to use for MongoDB authentication.
+- `SENDGRID_KEY`: This is your SendGrid API key.
+- `SENDGRID_FROM`: This is the email address to send the emails *from*. This needs to be added to your SendGrid account as an authorised sender before emails can be sent.
 
-If you have questions regarding contributing, using the project, or any related topic, you can reach us at our [Discord Server](http://chat.nhcarrigan.com) where we would be happy to help!
+## Seeding the Database
 
-## Contributors ✨
+**NOTE:** This step should *only* be performed if you are working with a development database for testing purposes. If you are working with a live production database, skip to the next section.
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+To seed some mock data into your database for testing this tool, run the following command:
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="http://www.nhcarrigan.com"><img src="https://avatars1.githubusercontent.com/u/63889819?v=4" width="100px;" alt=""/><br /><sub><b>Nicholas Carrigan (he/him)</b></sub></a><br /><a href="#projectManagement-nhcarrigan" title="Project Management">📆</a></td>
-  </tr>
-</table>
+```bash
+npm run db:seed
+```
 
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+This will generate a couple of documents to test this tool against.
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+## Generating an Email List
+
+If you have not run this tool before, you will need to generate your email list (saved as a `.csv`) from the database. Run the following command to do so:
+
+```bash
+npm run email:fetch
+```
+
+This will grab the userdata from the database and write the `email` and `unsubscribeId` fields to the file.
+
+## Sending your email!
+
+To send your email to that generated list, run:
+
+```bash
+npm run email:send
+```
+
+Congratulations! Assuming all of your settings are correct, you have successfully sent your first email!

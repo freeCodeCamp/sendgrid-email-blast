@@ -1,0 +1,38 @@
+{
+  "name": "sendgrid-experiment",
+  "version": "0.0.0",
+  "description": "A quick experiment with the SendGrid API",
+  "main": "./prod/main.js",
+  "scripts": {
+    "build": "tsc",
+    "db:seed": "node ./prod/db/seed.js",
+    "email:fetch": "node ./prod/scripts/fetch.js",
+    "email:send": "node ./prod/scripts/send.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhcarrigan/SendGrid-Experiment.git"
+  },
+  "author": "Nicholas Carrigan",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/nhcarrigan/SendGrid-Experiment/issues"
+  },
+  "homepage": "https://github.com/nhcarrigan/SendGrid-Experiment#readme",
+  "devDependencies": {
+    "@types/email-validator": "^1.0.6",
+    "@types/mongodb": "^3.5.34",
+    "@types/node": "^14.14.10",
+    "@types/ora": "^3.2.0",
+    "@types/validator": "^13.1.0",
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.4.0",
+    "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
+    "mongodb": "^3.6.3",
+    "ora": "^5.1.0",
+    "validator": "^13.5.1"
+  }
+}

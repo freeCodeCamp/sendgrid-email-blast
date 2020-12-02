@@ -28,6 +28,8 @@ You will also need to configure your environment variables. You can copy the `sa
 - `MONGO_PASSWORD`: This is the password to use for MongoDB authentication.
 - `SENDGRID_KEY`: This is your SendGrid API key.
 - `SENDGRID_FROM`: This is the email address to send the emails *from*. This needs to be added to your SendGrid account as an authorised sender before emails can be sent.
+- `SENDGRID_TEMPLATE`: This is the ID of the SendGrid Dynamic Template to use for the body of your emails.
+- `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.
 
 ## Seeding the Database
 

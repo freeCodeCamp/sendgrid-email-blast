@@ -1,3 +1,7 @@
+/**
+ * Ported to TypeScript from the freeCodeCamp /learn repository.
+ */
+
 import dotenv from "dotenv";
 import { MongoClient, ObjectID } from "mongodb";
 
@@ -5,6 +9,7 @@ dotenv.config();
 
 const { MONGO_DB, MONGO_URI, MONGO_USER, MONGO_PASSWORD } = process.env;
 
+// Handle missing environment variables
 if (!MONGO_DB || !MONGO_URI || !MONGO_USER || !MONGO_PASSWORD) {
   console.error("Missing required environment variables.");
   process.exit(1);
@@ -28,6 +33,7 @@ MongoClient.connect(
     const db = client.db(MONGO_DB);
     const user = db.collection("user");
 
+    // Remove the existing seed data if present
     user.deleteMany(
       {
         _id: {
@@ -43,6 +49,7 @@ MongoClient.connect(
           return;
         }
         console.info("Existing seed data cleaned");
+        // seed the new data
         try {
           await user.insertOne({
             _id: new ObjectID("5bd30e0f1caf6ac3ddddddb5"),
@@ -99,11 +106,12 @@ MongoClient.connect(
             isDonating: false,
             emailAuthLinkTTL: null,
             emailVerifyTTL: null,
+            unsubscribeId: "1"
           });
 
           await user.insertOne({
             _id: new ObjectID("5bd30e0f1caf6ac3ddddddb9"),
-            email: "imnotreal@ha.ha.com",
+            email: "nhcarrigan@gmail.com",
             emailVerified: true,
             progressTimestamps: [],
             isBanned: false,
@@ -156,6 +164,7 @@ MongoClient.connect(
             isDonating: false,
             emailAuthLinkTTL: null,
             emailVerifyTTL: null,
+            unsubscribeId: "2"
           });
         } catch (err) {
           console.error(err);

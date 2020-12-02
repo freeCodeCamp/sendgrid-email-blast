@@ -1,3 +1,7 @@
+/**
+ * Ported to TypeScript from the freeCodeCamp scripts repository.
+ */
+
 import dotenv from "dotenv";
 dotenv.config();
 

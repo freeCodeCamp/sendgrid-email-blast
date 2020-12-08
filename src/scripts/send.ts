@@ -28,10 +28,28 @@ const subjectValue = process.env.MAIL_SUBJECT || "Weekly Update";
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 const filePath = path.join(__dirname + "/../validEmails.csv");
+const bouncePath = path.join(__dirname + "/../bouncedEmails.csv");
+
+/**
+ * Grab bounce list
+ * Hoist through callback because readFile returns void.
+ */
+let bounceList: string[];
+readFile(bouncePath, "utf8", (err, data) => {
+  console.info('Reading bounce list...')
+  if (err) {
+    console.error("Could not read bounce list.");
+    console.error(err);
+    process.exit(1);
+  }
+  bounceList = data.split("\n");
+  console.info('Bounce list obtained!')
+});
 
 readFile(filePath, "utf8", async (err, data) => {
   console.info("Reading email list...");
   if (err) {
+    console.error('Could not read email list.')
     console.error(err);
     process.exit(1);
   }
@@ -56,6 +74,10 @@ readFile(filePath, "utf8", async (err, data) => {
    * per second, so should not need to throttle this...
    */
   dataList.forEach(async (user) => {
+    if (bounceList.includes(user.email)) {
+      console.info(`Skipping ${user.email} - they are in the bounce list.`);
+      return;
+    }
     console.info(user.email, user.unsubscribeId);
     const msg: MailDataRequired = {
       to: user.email,

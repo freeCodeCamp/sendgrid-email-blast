@@ -75,7 +75,7 @@ Congratulations! Assuming all of your settings are correct, you have successfull
 
 ## Error Handling
 
-As you scale up your email list, you may run in to connection issues and other errors. Emails that fail 
+As you scale up your email list, you may run in to connection issues and other errors. Emails that fail are written to the `failedEmails.csv` file. When the script is complete, you can manually copy those emails to the `validEmails.csv` file (overwriting the current contents) and run the `email:send` script again.
 
 ## Credits
 

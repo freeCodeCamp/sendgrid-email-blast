@@ -1,6 +1,6 @@
-# SendGrid Testing
+# SendGrid Email Blast
 
-Testing the SendGrid API and email fetch scripts.
+This is a Node.js tool to send email blasts through the SendGrid API. Use of this tool is done entirely through the CLI.
 
 # Using the Tool
 

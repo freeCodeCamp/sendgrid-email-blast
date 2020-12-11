@@ -62,3 +62,7 @@ npm run email:send
 ```
 
 Congratulations! Assuming all of your settings are correct, you have successfully sent your first email!
+
+## Credits
+
+The `seed` and `fetch` scripts were ported to TypeScript from freeCodeCamp's JavaScript versions.

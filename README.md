@@ -20,6 +20,8 @@ This project is built with TypeScript, so the files need to be built. You can co
 npm run build
 ```
 
+The compiled files will be saved in a `prod` directory, which `git` will not track.
+
 You will also need to configure your environment variables. You can copy the `sample.env` to a `.env` file, or create the `.env` file from scratch. Then, set the following values:
 
 - `MONGO_URI`: This is the full connection string for your MongoDB instance.
@@ -51,17 +53,29 @@ If you have not run this tool before, you will need to generate your email list 
 npm run email:fetch
 ```
 
-This will grab the userdata from the database and write the `email` and `unsubscribeId` fields to the file.
+This will grab the user data from the database and write the `email` and `unsubscribeId` fields to the `validEmails.csv` file.
+
+## Create other files
+
+Within your `prod` directory, you will need to ensure the presence of the following files:
+
+- `bouncedEmails.csv`: This is a file to track your bounced email addresses (to avoid sending to them again). Create this with a line that contains `email`. *You will need to create this manually*.
+- `validEmails.csv`: This is the file containing the list of email + unsubscribeId values to send the emails to. The `fetch` script will create this.
+- `failedEmails.csv`: This is the file containing the list of errored emails from a send request. The `send` script will create this.
 
 ## Sending your email!
 
-To send your email to that generated list, run:
+To send your email to the `validEmails.csv` list, run:
 
 ```bash
 npm run email:send
 ```
 
 Congratulations! Assuming all of your settings are correct, you have successfully sent your first email!
+
+## Error Handling
+
+As you scale up your email list, you may run in to connection issues and other errors. Emails that fail 
 
 ## Credits
 

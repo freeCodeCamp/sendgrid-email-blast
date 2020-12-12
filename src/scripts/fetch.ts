@@ -25,7 +25,7 @@ validOutput.write("email,unsubscribeId\n");
 invalidOutput.write("email,unsubscribeId\n");
 
 const rs = new Stream.Readable({ objectMode: true });
-rs._read = function () {};
+//rs._read = function () {};
 
 rs.on("data", ({ email, unsubscribeId }) => {
   if (validator.isEmail(email)) {

@@ -106,7 +106,7 @@ MongoClient.connect(
             isDonating: false,
             emailAuthLinkTTL: null,
             emailVerifyTTL: null,
-            unsubscribeId: "1"
+            unsubscribeId: "1",
           });
 
           await user.insertOne({
@@ -164,13 +164,13 @@ MongoClient.connect(
             isDonating: false,
             emailAuthLinkTTL: null,
             emailVerifyTTL: null,
-            unsubscribeId: "2"
+            unsubscribeId: "2",
           });
         } catch (err) {
           console.error(err);
         } finally {
           console.info("Seeded database.");
-          process.exit(0)
+          process.exit(0);
         }
       }
     );

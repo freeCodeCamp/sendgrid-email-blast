@@ -3,27 +3,30 @@ dotenv.config();
 import sgMail, { MailDataRequired } from "@sendgrid/mail";
 import path from "path";
 import { createWriteStream, readFile } from "fs";
+import ora from "ora";
 
 /**
  * If we are missing any required .env values,
  * terminate the process immediately.
  */
+const envCheck = ora("Validating ENV").start();
 if (!process.env.SENDGRID_KEY) {
-  console.error("%cMissing SendGrid Key", "color: red;");
+  envCheck.fail("Missing SendGrid API key!");
   process.exit(1);
 }
 const fromAddress = process.env.SENDGRID_FROM;
 if (!fromAddress) {
-  console.error("%cMissing sender email address!", "color: red;");
+  envCheck.fail("Missing sender email address!");
   process.exit(1);
 }
 const sgTemplate = process.env.SENDGRID_TEMPLATE;
 if (!sgTemplate) {
-  console.error("%cMissing SendGrid Template ID", "color: red;");
+  envCheck.fail("Missing SendGrid template ID!");
   process.exit(1);
 }
 const subjectValue = process.env.MAIL_SUBJECT || "Weekly Update";
 sgMail.setApiKey(process.env.SENDGRID_KEY);
+envCheck.succeed("Environment Variables Validated!");
 
 /**
  * Create variables for file paths:
@@ -36,14 +39,14 @@ const bouncePath = path.join(__dirname + "/../bouncedEmails.csv");
 const failedPath = path.join(__dirname + "/../failedEmails.csv");
 
 readFile(bouncePath, "utf8", (err, data) => {
-  console.info("%cReading bounce list...", "color: yellow;");
+  const readBounce = ora("Reading bounced email list...").start();
   if (err) {
-    console.error("%cCould not read bounce list.", "color: red");
+    readBounce.fail("Could not read email bounce list!");
     console.error(err);
     process.exit(1);
   }
   const bounceList = data.split("\n");
-  console.info("$cBounce list obtained!", "color: green");
+  readBounce.succeed("Bounce list obtained!");
 
   /**
    * We need to create a write stream to allow
@@ -62,14 +65,14 @@ readFile(bouncePath, "utf8", (err, data) => {
    * logic as readFile does not return anything.
    */
   readFile(filePath, "utf8", async (err, data) => {
-    console.info("%cReading email list...", "color: yellow");
+    const readEmails = ora("Reading email list...").start();
 
     /**
      * For error handling, terminate the process if the email
      * list cannot be read.
      */
     if (err) {
-      console.error("%cCould not read email list.", "color: red;");
+      readEmails.fail("Could not read email list!");
       console.error(err);
       process.exit(1);
     }
@@ -85,10 +88,7 @@ readFile(bouncePath, "utf8", (err, data) => {
         unsubscribeId: el.split(",")[1],
       }))
       .filter((el) => el.email);
-    console.info(
-      "%cEmail list obtained - beginning send process!",
-      "color: green;"
-    );
+    readEmails.succeed("Email list obtained!");
 
     /**
      * Create variables for total number of emails to send
@@ -97,6 +97,7 @@ readFile(bouncePath, "utf8", (err, data) => {
      */
     const emailTotal = dataList.length;
     let emailCount = 0;
+    const sendEmails = ora(`Sending ${emailTotal} emails...`).start();
     /**
      * Iterate through each to grab data needed for template
      * and send email with that data. Rate limit is 10,000 mails
@@ -108,16 +109,9 @@ readFile(bouncePath, "utf8", (err, data) => {
        * address to protect our send rate and reputation.
        */
       if (bounceList.includes(user.email)) {
-        console.info(
-          `%cSkipping ${user.email} - they are in the bounce list.`,
-          "color: yellow;"
-        );
         emailCount++;
-        if (emailCount === emailCount) {
-          console.info(
-            `%cEmail send complete. Processed ${emailTotal} requests.`,
-            "color: green;"
-          );
+        if (emailCount === emailTotal) {
+          sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
         }
         return;
       }
@@ -162,19 +156,12 @@ readFile(bouncePath, "utf8", (err, data) => {
           /**
            * Log a successful send request.
            */
-          console.info(
-            `%cMessage sending success: ${user.email}`,
-            "color: green;"
-          );
           emailCount++;
           if (emailCount === emailTotal) {
-            console.info(
-              `%cEmail send complete. Processed ${emailTotal} requests.`,
-              "color: green;"
-            );
+            sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
           }
         })
-        .catch((err) => {
+        .catch(() => {
           /**
            * If a send fails, log the basic error information to
            * avoid flooding the console, then pass the email and
@@ -182,17 +169,9 @@ readFile(bouncePath, "utf8", (err, data) => {
            * This process allows those emails to be copied to
            * the validEmails.csv to make another send attempt.
            */
-          console.error(err.errno, err.code);
-          console.error(
-            `%cMessage sending failed! Could not send to ${user.email}!`,
-            "color: red;"
-          );
           failedStream.write(`${user.email},${user.unsubscribeId}\n`);
           if (emailCount === emailTotal) {
-            console.info(
-              `%cEmail send complete. Processed ${emailTotal} requests.`,
-              "color: green;"
-            );
+            sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
           }
         });
     });

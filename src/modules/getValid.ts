@@ -3,6 +3,12 @@ import ora from "ora";
 import { join } from "path";
 import { EmailInt } from "../interfaces/emailInt";
 
+/**
+ * Gets the valid list of email addresses from the validEmails.csv file,
+ * and maps them to an array of EmailInt objects.
+ * @returns {Promise<EmailInt[]>} The list of valid emails, formatted as
+ * proper objects.
+ */
 export const getValid = async (): Promise<EmailInt[]> => {
   const spinner = ora("Reading valid email list...");
 

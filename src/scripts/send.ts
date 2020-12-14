@@ -109,10 +109,6 @@ readFile(bouncePath, "utf8", (err, data) => {
        * address to protect our send rate and reputation.
        */
       if (bounceList.includes(user.email)) {
-        emailCount++;
-        if (emailCount === emailTotal) {
-          sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
-        }
         return;
       }
 
@@ -156,10 +152,6 @@ readFile(bouncePath, "utf8", (err, data) => {
           /**
            * Log a successful send request.
            */
-          emailCount++;
-          if (emailCount === emailTotal) {
-            sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
-          }
         })
         .catch(() => {
           /**
@@ -170,10 +162,11 @@ readFile(bouncePath, "utf8", (err, data) => {
            * the validEmails.csv to make another send attempt.
            */
           failedStream.write(`${user.email},${user.unsubscribeId}\n`);
-          if (emailCount === emailTotal) {
-            sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
-          }
         });
+      emailCount++;
+      if (emailCount === emailTotal) {
+        sendEmails.succeed(`${emailTotal} emails sent! Have a nice day!`);
+      }
     });
   });
 });

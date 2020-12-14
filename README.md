@@ -29,13 +29,12 @@ You will also need to configure your environment variables. You can copy the `sa
 - `MONGO_USER`: This is the username to use for MongoDB authentication.
 - `MONGO_PASSWORD`: This is the password to use for MongoDB authentication.
 - `SENDGRID_KEY`: This is your SendGrid API key.
-- `SENDGRID_FROM`: This is the email address to send the emails *from*. This needs to be added to your SendGrid account as an authorised sender before emails can be sent.
-- `SENDGRID_TEMPLATE`: This is the ID of the SendGrid Dynamic Template to use for the body of your emails.
+- `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender before emails can be sent.
 - `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.
 
 ## Seeding the Database
 
-**NOTE:** This step should *only* be performed if you are working with a development database for testing purposes. If you are working with a live production database, skip to the next section.
+**NOTE:** This step should _only_ be performed if you are working with a development database for testing purposes. If you are working with a live production database, skip to the next section.
 
 To seed some mock data into your database for testing this tool, run the following command:
 
@@ -59,17 +58,20 @@ This will grab the user data from the database and write the `email` and `unsubs
 
 Within your `prod` directory, you will need to ensure the presence of the following files:
 
-- `bouncedEmails.csv`: This is a file to track your bounced email addresses (to avoid sending to them again). Create this with a line that contains `email`. *You will need to create this manually*.
+- `bouncedEmails.csv`: This is a file to track your bounced email addresses (to avoid sending to them again). Create this with a line that contains `email`. _You will need to create this manually_.
 - `validEmails.csv`: This is the file containing the list of email + unsubscribeId values to send the emails to. The `fetch` script will create this.
 - `failedEmails.csv`: This is the file containing the list of errored emails from a send request. The `send` script will create this.
+- `emailBody.txt`: This is the file containing the plain-text body of your email to send.
 
 ## Sending your email!
 
 To send your email to the `validEmails.csv` list, run:
 
 ```bash
-npm run email:send
+npm run start
 ```
+
+The tool will walk you through the steps to confirm everything is set correctly, generate a test email, and send the full blast.
 
 Congratulations! Assuming all of your settings are correct, you have successfully sent your first email!
 

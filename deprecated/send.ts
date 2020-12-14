@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import sgMail, { MailDataRequired } from "@sendgrid/mail";
 import path from "path";
 import { createWriteStream, readFile } from "fs";

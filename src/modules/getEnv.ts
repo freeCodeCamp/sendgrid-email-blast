@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { prompt } from "inquirer";
 import ora from "ora";
 import { ConfigInt } from "../interfaces/configInt";
@@ -19,57 +20,61 @@ export const getEnv = async (): Promise<ConfigInt> => {
   /**
    * Start a spinner for this process.
    */
-  const envCheck = ora("Validating ENV").start();
+  const envCheck = ora(chalk.cyan.bgBlack("Validating ENV")).start();
 
   /**
    * Checks that all required environment variables are present!
    */
   if (!process.env.SENDGRID_KEY) {
-    envCheck.fail("Missing SendGrid API key!");
+    envCheck.fail(chalk.red.bgBlack("Missing SendGrid API key!"));
     return results;
   }
   results.apiKey = process.env.SENDGRID_KEY;
 
   const fromAddress = process.env.SENDGRID_FROM;
   if (!fromAddress) {
-    envCheck.fail("Missing sender email address!");
+    envCheck.fail(chalk.red.bgBlack("Missing sender email address!"));
     return results;
   }
   results.fromAddress = fromAddress;
 
   const sgTemplate = process.env.SENDGRID_TEMPLATE;
   if (!sgTemplate) {
-    envCheck.fail("Missing SendGrid template ID!");
+    envCheck.fail(chalk.red.bgBlack("Missing SendGrid template ID!"));
     return results;
   }
   results.templateId = sgTemplate;
 
   results.subject = process.env.MAIL_SUBJECT || "Weekly Update";
 
-  envCheck.succeed("Environment Variables Validated!");
+  envCheck.succeed(chalk.green.bgBlack("Environment Variables Validated!"));
   /**
    * Prompts the user for manual confirmation of email and subject fields.
    */
   const validateEnv = await prompt([
     {
       type: "confirm",
-      message: `Is ${fromAddress} the correct email address?`,
+      message: chalk.cyan.bgBlack(
+        `Is ${fromAddress} the correct email address?`
+      ),
       name: "email_valid",
     },
     {
       type: "confirm",
-      message: `Is ${results.subject} the correct subject line?`,
+      message: chalk.cyan.bgBlack(
+        `Is ${results.subject} the correct subject line?`
+      ),
       name: "subject_valid",
     },
   ]);
 
   if (!validateEnv.email_valid) {
-    console.info("Email is incorrect. Exiting process...");
+    console.info(chalk.red.bgBlack("Email is incorrect. Exiting process..."));
     return results;
   }
 
   if (!validateEnv.subject_valid) {
-    console.info("Subject is incorrect. Exiting process...");
+    console.info(chalk.red.bgBlack("Subject is incorrect. Exiting process..."));
     return results;
   }
 

@@ -1,4 +1,5 @@
 import { setApiKey } from "@sendgrid/mail";
+import chalk from "chalk";
 import { MultiBar, Presets } from "cli-progress";
 import dotenv from "dotenv";
 import { createWriteStream } from "fs-extra";
@@ -9,10 +10,14 @@ import { getBounced } from "./modules/getBounced";
 import { getEnv } from "./modules/getEnv";
 import { getValid } from "./modules/getValid";
 import { sendEmail } from "./modules/sendEmail";
+import { barFormatter } from "./tools/barFormatter";
 dotenv.config();
 
 // Anonymous function for IIFE to allow async
 (async function () {
+  console.info(
+    chalk.green.bgBlack(`Hello! Launching email blast application.`)
+  );
   /**
    * Begin by confirming the environment variables.
    */
@@ -75,15 +80,17 @@ dotenv.config();
 
   const emailTotal = validList.length;
 
+  console.info(chalk.magenta.underline.bgBlack("Email Send Progress:"));
+
   const progress = new MultiBar(
-    { clearOnComplete: false, hideCursor: true },
+    { clearOnComplete: false, hideCursor: true, format: barFormatter },
     Presets.shades_classic
   );
 
-  const totalBar = progress.create(emailTotal, 0, { file: "Total processed" });
-  const sentBar = progress.create(emailTotal, 0, { file: "Emails sent" });
-  const failedBar = progress.create(emailTotal, 0, { file: "Emails failed" });
-  const skippedBar = progress.create(emailTotal, 0, { file: "Emails skipped" });
+  const totalBar = progress.create(emailTotal, 0, { task: "Processed" });
+  const sentBar = progress.create(emailTotal, 0, { task: "Sent" });
+  const failedBar = progress.create(emailTotal, 0, { task: "Failed" });
+  const skippedBar = progress.create(emailTotal, 0, { task: "Skipped" });
 
   for (let i = 0; i < emailTotal; i++) {
     totalBar.increment();
@@ -107,5 +114,7 @@ dotenv.config();
    * TODO: Loop while failed emails exist and send again
    */
 
-  console.info("Email blast complete! Have a nice day! :)");
+  console.info(
+    chalk.green.bgBlack("Email blast complete! Have a nice day! :)")
+  );
 })();

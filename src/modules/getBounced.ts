@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { readFile } from "fs-extra";
 import { prompt } from "inquirer";
 import ora from "ora";
@@ -17,7 +18,9 @@ export const getBounced = async (): Promise<string[]> => {
   const bounceListString = await readFile(filePath, "utf8");
 
   if (!bounceListString || !bounceListString.length) {
-    spinner.fail("Failed to read bounce list. Exiting process...");
+    spinner.fail(
+      chalk.red.bgBlack("Failed to read bounce list. Exiting process...")
+    );
     return [];
   }
 
@@ -29,7 +32,7 @@ export const getBounced = async (): Promise<string[]> => {
     // Strip accidental empty lines
     .filter((line) => line);
 
-  spinner.succeed("Bounce list obtained!");
+  spinner.succeed(chalk.green.bgBlack("Bounce list obtained!"));
 
   /**
    * In case the bounce list is empty, confirm that is correct and proceed.
@@ -39,16 +42,19 @@ export const getBounced = async (): Promise<string[]> => {
       {
         name: "proceed",
         type: "confirm",
-        message:
-          "The bounced email list is empty. Proceed with sending anyway?",
+        message: chalk.yellow.bgBlack(
+          "The bounced email list is empty. Proceed with sending anyway?"
+        ),
       },
     ]);
 
     if (!shouldProceed.proceed) {
-      console.error("Bounce list should not be empty. Exiting process...");
+      console.error(
+        chalk.red.bgBlack("Bounce list should not be empty. Exiting process...")
+      );
       return [];
     }
-    console.info("Bounce list confirmed. Proceeding!");
+    console.info(chalk.green.bgBlack("Bounce list confirmed. Proceeding!"));
     return ["thisisverymuchafakeemail@nope.txt"];
   }
 

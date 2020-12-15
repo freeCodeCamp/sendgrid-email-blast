@@ -15,22 +15,22 @@ export const barFormatter = (
     options.barIncompleteString.length - bar.length
   );
   const percentage = Math.floor(params.progress * 10000) / 100;
-  switch (payload.file) {
+  switch (payload.task) {
     case "Processed":
       return chalk.cyan.bgBlack(
         `Processed: [${bar}${barIncomplete}] | ${percentage}% complete! | ETA: ${params.eta}s | ${params.value}/${params.total}`
       );
     case "Sent":
       return chalk.green.bgBlack(
-        `Sent: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
+        `     Sent: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
     case "Failed":
       return chalk.red.bgBlack(
-        `Failed: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
+        `   Failed: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
     case "Skipped":
       return chalk.yellow.bgBlack(
-        `Skipped: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
+        `  Skipped: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
   }
   return ``;

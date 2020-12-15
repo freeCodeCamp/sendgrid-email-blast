@@ -1,4 +1,6 @@
 import { MailDataRequired, send } from "@sendgrid/mail";
+import { createWriteStream } from "fs-extra";
+import { join } from "path";
 import { ConfigInt } from "../interfaces/configInt";
 import { EmailInt } from "../interfaces/emailInt";
 
@@ -42,14 +44,21 @@ export const sendEmail = async (
       },
     },
   };
+  /**
+   * Create error logging stream
+   */
+  const filepath = join(__dirname + "/../errorLog.txt");
+  const errorStream = createWriteStream(filepath);
 
-  const success = await send(message);
-
-  const successCode = success[0].statusCode;
-
-  if (successCode !== 200 && successCode !== 202) {
+  try {
+    const success = await send(message);
+    const successCode = success[0].statusCode;
+    if (successCode !== 200 && successCode !== 202) {
+      return false;
+    }
+    return true;
+  } catch (err) {
+    errorStream.write(`${err.errno} - ${err.code}: ${email.email}`);
     return false;
   }
-
-  return true;
 };

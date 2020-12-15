@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { MultiBar, Presets } from "cli-progress";
 import dotenv from "dotenv";
 import { createWriteStream } from "fs-extra";
+import { prompt } from "inquirer";
 import { join } from "path";
 import { emailTest } from "./modules/emailTest";
 import { getBody } from "./modules/getBody";
@@ -64,8 +65,30 @@ dotenv.config();
   const validList = await getValid();
 
   if (!validList.length) {
+    console.error(
+      chalk.red.bgBlack("No email addresses found. Check your validEmails.csv")
+    );
     return;
   }
+
+  const shouldProceed = await prompt([
+    {
+      name: "continue",
+      message: chalk.cyan.bgBlack(
+        `Proceed with sending to ${chalk.yellow.bgBlack(
+          validList.length
+        )} addresses?`
+      ),
+      type: "confirm",
+    },
+  ]);
+
+  if (!shouldProceed.continue) {
+    console.error(chalk.red.bgBlack("Process cancelled. Have a nice day."));
+    return;
+  }
+
+  console.info(chalk.green.bgBlack("Beginning send process..."));
 
   /**
    * Begin a write stream to log the failed email attempts.
@@ -109,10 +132,6 @@ dotenv.config();
   }
 
   progress.stop();
-
-  /**
-   * TODO: Loop while failed emails exist and send again
-   */
 
   console.info(
     chalk.green.bgBlack("Email blast complete! Have a nice day! :)")

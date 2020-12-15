@@ -55,14 +55,14 @@ export const getEnv = async (): Promise<ConfigInt> => {
     {
       type: "confirm",
       message: chalk.cyan.bgBlack(
-        `Is ${fromAddress} the correct email address?`
+        `Is ${chalk.yellow.bgBlack(fromAddress)} the correct email address?`
       ),
       name: "email_valid",
     },
     {
       type: "confirm",
       message: chalk.cyan.bgBlack(
-        `Is ${results.subject} the correct subject line?`
+        `Is ${chalk.yellow.bgBlack(results.subject)} the correct subject line?`
       ),
       name: "subject_valid",
     },

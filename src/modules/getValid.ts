@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { readFile } from "fs-extra";
 import ora from "ora";
 import { join } from "path";
@@ -10,14 +11,16 @@ import { EmailInt } from "../interfaces/emailInt";
  * proper objects.
  */
 export const getValid = async (): Promise<EmailInt[]> => {
-  const spinner = ora("Reading valid email list...");
+  const spinner = ora(chalk.cyan.bgBlack("Reading valid email list..."));
 
   const filePath = join(__dirname + "/../validEmails.csv");
 
   const validListString = await readFile(filePath, "utf8");
 
   if (!validListString || !validListString.length) {
-    spinner.fail("Failed to read valid email list. Exiting process...");
+    spinner.fail(
+      chalk.red.bgBlack("Failed to read valid email list. Exiting process...")
+    );
     return [];
   }
 
@@ -34,5 +37,6 @@ export const getValid = async (): Promise<EmailInt[]> => {
       return { email, unsubscribeId };
     });
 
+  spinner.succeed(chalk.green.bgBlack("Email list obtained!"));
   return validList;
 };

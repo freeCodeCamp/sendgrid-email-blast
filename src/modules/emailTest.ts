@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { prompt } from "inquirer";
 import ora from "ora";
 import { ConfigInt } from "../interfaces/configInt";
@@ -20,7 +21,7 @@ export const emailTest = async (
     {
       name: "should_test",
       type: "confirm",
-      message: "Do you want to send a test email?",
+      message: chalk.cyan.bgBlack("Do you want to send a test email?"),
     },
   ]);
 
@@ -36,11 +37,11 @@ export const emailTest = async (
     {
       name: "test_address",
       type: "input",
-      message: "Please enter your test address",
+      message: chalk.cyan.bgBlack("Please enter your test address"),
     },
   ]);
 
-  const spinner = ora("Sending test email...").start();
+  const spinner = ora(chalk.cyan.bgBlack("Sending test email...")).start();
 
   const testEmailObject: EmailInt = {
     email: testAddress.test_address,
@@ -50,26 +51,30 @@ export const emailTest = async (
   const success = await sendEmail(config, testEmailObject, body);
 
   if (!success) {
-    spinner.fail("Failed to send test email.");
+    spinner.fail(chalk.red.bgBlack("Failed to send test email."));
     return false;
   }
 
   spinner.succeed(
-    `Email sent! Please check your ${testEmailObject.email} inbox.`
+    chalk.green.bgBlack(
+      `Email sent! Please check your ${testEmailObject.email} inbox.`
+    )
   );
 
   const didRecieve = await prompt([
     {
       name: "got_email",
       type: "confirm",
-      message: "Did you receive the email? Is it correct?",
+      message: chalk.cyan.bgBlack("Did you receive the email? Is it correct?"),
     },
   ]);
 
   if (!didRecieve.got_email) {
-    console.error("Test email unsuccessful. Exiting process...");
+    console.error(
+      chalk.red.bgBlack("Test email unsuccessful. Exiting process...")
+    );
     return false;
   }
-  console.info("Test email succeeded!");
+  console.info(chalk.green.bgBlack("Test email succeeded!"));
   return true;
 };

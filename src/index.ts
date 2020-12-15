@@ -80,10 +80,10 @@ dotenv.config();
     Presets.shades_classic
   );
 
-  const totalBar = progress.create(emailTotal, 0, { file: "Total processed" });
-  const sentBar = progress.create(emailTotal, 0, { file: "Emails sent" });
-  const failedBar = progress.create(emailTotal, 0, { file: "Emails failed" });
-  const skippedBar = progress.create(emailTotal, 0, { file: "Emails skipped" });
+  const totalBar = progress.create(emailTotal, 0, { file: "Processed" });
+  const sentBar = progress.create(emailTotal, 0, { file: "Sent" });
+  const failedBar = progress.create(emailTotal, 0, { file: "Failed" });
+  const skippedBar = progress.create(emailTotal, 0, { file: "Skipped" });
 
   for (let i = 0; i < emailTotal; i++) {
     totalBar.increment();

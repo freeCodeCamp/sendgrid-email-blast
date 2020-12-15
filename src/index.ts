@@ -1,7 +1,7 @@
 import { setApiKey } from "@sendgrid/mail";
+import { MultiBar, Presets } from "cli-progress";
 import dotenv from "dotenv";
 import { createWriteStream } from "fs-extra";
-import ora from "ora";
 import { join } from "path";
 import { emailTest } from "./modules/emailTest";
 import { getBody } from "./modules/getBody";
@@ -74,30 +74,34 @@ dotenv.config();
    */
 
   const emailTotal = validList.length;
-  let emailFailed = 0,
-    emailSucceeded = 0,
-    emailSkipped = 0;
 
-  const spinner = ora(`Sending ${emailTotal} emails. Please wait...`).start();
+  const progress = new MultiBar(
+    { clearOnComplete: false, hideCursor: true },
+    Presets.shades_classic
+  );
+
+  const totalBar = progress.create(emailTotal, 0, { file: "Total processed" });
+  const sentBar = progress.create(emailTotal, 0, { file: "Emails sent" });
+  const failedBar = progress.create(emailTotal, 0, { file: "Emails failed" });
+  const skippedBar = progress.create(emailTotal, 0, { file: "Emails skipped" });
 
   for (let i = 0; i < emailTotal; i++) {
+    totalBar.increment();
     const targetEmail = validList[i];
     if (bouncedList.includes(targetEmail.email)) {
-      emailSkipped++;
+      skippedBar.increment();
       continue;
     }
     const status = await sendEmail(configuration, targetEmail, body);
     if (!status) {
-      emailFailed++;
+      failedBar.increment();
       failureStream.write(`${targetEmail.email},${targetEmail.unsubscribeId}`);
     } else {
-      emailSucceeded++;
+      sentBar.increment();
     }
   }
 
-  spinner.succeed(
-    `Sent ${emailSucceeded} out of ${emailTotal} mails. ${emailFailed} failed, and ${emailSkipped} were skipped.`
-  );
+  progress.stop();
 
   /**
    * TODO: Loop while failed emails exist and send again

@@ -2,3 +2,7 @@
 * text eol=LF
 *.ts text
 *.spec.ts text
+
+# Ignore binary files >:(
+*.png binary
+*.jpg binary

@@ -125,7 +125,9 @@ dotenv.config();
     const status = await sendEmail(configuration, targetEmail, body);
     if (!status) {
       failedBar.increment();
-      failureStream.write(`${targetEmail.email},${targetEmail.unsubscribeId}`);
+      failureStream.write(
+        `${targetEmail.email},${targetEmail.unsubscribeId}\n`
+      );
     } else {
       sentBar.increment();
     }

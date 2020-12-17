@@ -13,7 +13,6 @@ export const getEnv = async (): Promise<ConfigInt> => {
   const results: ConfigInt = {
     apiKey: "",
     fromAddress: "",
-    templateId: "",
     subject: "",
     valid: false,
   };
@@ -37,13 +36,6 @@ export const getEnv = async (): Promise<ConfigInt> => {
     return results;
   }
   results.fromAddress = fromAddress;
-
-  const sgTemplate = process.env.SENDGRID_TEMPLATE;
-  if (!sgTemplate) {
-    envCheck.fail(chalk.red.bgBlack("Missing SendGrid template ID!"));
-    return results;
-  }
-  results.templateId = sgTemplate;
 
   results.subject = process.env.MAIL_SUBJECT || "Weekly Update";
 

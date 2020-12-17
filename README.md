@@ -1,4 +1,7 @@
 # SendGrid Email Blast
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is a Node.js tool to send email blasts through the SendGrid API. Use of this tool is done entirely through the CLI.
 
@@ -29,12 +32,16 @@ You will also need to configure your environment variables. You can copy the `sa
 - `MONGO_USER`: This is the username to use for MongoDB authentication.
 - `MONGO_PASSWORD`: This is the password to use for MongoDB authentication.
 - `SENDGRID_KEY`: This is your SendGrid API key.
-- `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender before emails can be sent.
+- `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender or verified domain before emails can be sent.
 - `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.
 
 ## Seeding the Database
 
-**NOTE:** This step should _only_ be performed if you are working with a development database for testing purposes. If you are working with a live production database, skip to the next section.
+```diff
+- NOTE: This script should only be run if you are working
+- with a development database instance. This WILL inject documents
+- into your database.
+```
 
 To seed some mock data into your database for testing this tool, run the following command:
 
@@ -46,7 +53,12 @@ This will generate a couple of documents to test this tool against.
 
 ## Generating an Email List
 
-If you have not run this tool before, you will need to generate your email list (saved as a `.csv`) from the database. Run the following command to do so:
+Provided you have connected a database through the environment variables, you can have the tool fetch the documents from that database and parse the documents into `email,unsubscribeId` pairs. The script will validate the email addresses and only save valid email accounts. 
+
+```diff
+! NOTE: This tool was built for freeCodeCamp, and thus relies
+! on some specific values to be present in the database schema.
+```
 
 ```bash
 npm run email:fetch
@@ -71,14 +83,29 @@ To send your email to the `validEmails.csv` list, run:
 npm run start
 ```
 
-The tool will walk you through the steps to confirm everything is set correctly, generate a test email, and send the full blast.
+The tool will walk you through the steps to confirm everything is set correctly, generate a test email, and send the full blast. Please review [the CLI steps outline](./docs/cli-steps.md) for more information.
 
 Congratulations! Assuming all of your settings are correct, you have successfully sent your first email!
-
-## Error Handling
-
-As you scale up your email list, you may run in to connection issues and other errors. Emails that fail are written to the `failedEmails.csv` file. When the script is complete, you can manually copy those emails to the `validEmails.csv` file (overwriting the current contents) and run the `email:send` script again.
 
 ## Credits
 
 The `seed` and `fetch` scripts were ported to TypeScript from freeCodeCamp's JavaScript versions.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://www.nhcarrigan.com"><img src="https://avatars1.githubusercontent.com/u/63889819?v=4" width="100px;" alt=""/><br /><sub><b>Nicholas Carrigan (he/him)</b></sub></a><br /><a href="#projectManagement-nhcarrigan" title="Project Management">📆</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

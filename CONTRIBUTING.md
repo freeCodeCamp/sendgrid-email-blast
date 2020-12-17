@@ -6,6 +6,34 @@ This tool is built for freeCodeCamp, so please ensure that all interactions comp
 
 First, fork this repository to your own account. Then use `git clone <url>` to bring your forked repository down to your local machine (remember to get the URL for *your* repository, not the original). Optionally, use `git remote add upstream <url>` to add the original repository as the upstream (this is helpful for keeping your fork up-to-date).
 
+## Creating a SendGrid Account
+
+This tool relies on the use of SendGrid's email platform. If you have not set up an account yet, you will need to do so. I've [written a tutorial](https://www.freecodecamp.org/news/send-email-newsletter-with-the-sendgrid-api/) that walks you through this process.
+
+## Configuring the Environment
+
+You will need to set the following environment variables:
+
+```py
+# These values are REQUIRED for the send tool to work.
+SENDGRID_KEY="API Key for Sendgrid"
+SENDGRID_FROM="Email address to send emails FROM"
+
+# This line should be changed weekly to set that week's email subject line
+MAIL_SUBJECT="Weekly Update!"
+```
+
+Additionally, if you are working with the database functionality, you will need to configure that as well.
+
+```py
+# These values are only needed for the fetch and seed scripts.
+# If you are loading your email csv manually, you may skip these.
+MONGO_URI="Your MongoDB connection string"
+MONGO_DB="MongoDB database name"
+MONGO_USER="MongoDB database username"
+MONGO_PASSWORD="MongoDB database password"
+```
+
 ## Claiming an Issue
 
 All of our issues are open to contributors! If you see an open issue you would like to work on, please comment on the issue so we may assign it to you. 

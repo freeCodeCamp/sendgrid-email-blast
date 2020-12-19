@@ -127,6 +127,9 @@ dotenv.config();
     const targetEmail = validList[i];
     if (bouncedList.includes(targetEmail.email)) {
       skippedBar.increment();
+      logStream.write(
+        `SKIPPED - ${targetEmail.email} - Address was in bounce list.`
+      );
       continue;
     }
     const status = await sendEmail(configuration, targetEmail, body);

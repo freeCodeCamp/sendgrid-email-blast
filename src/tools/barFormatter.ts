@@ -15,10 +15,17 @@ export const barFormatter = (
     options.barIncompleteString.length - bar.length
   );
   const percentage = Math.floor(params.progress * 10000) / 100;
+
+  const etaTime = params.eta;
+  const etaHours = etaTime >= 3600 ? etaTime / 3600 : 0;
+  const etaMinutes = etaTime >= 60 ? (etaTime % 3600) / 60 : 0;
+  const etaSeconds = (etaTime - etaHours - etaMinutes) % 60;
   switch (payload.task) {
     case "Processed":
       return chalk.cyan.bgBlack(
-        `Processed: [${bar}${barIncomplete}] | ${percentage}% complete! | ETA: ${params.eta}s | ${params.value}/${params.total}`
+        `Processed: [${bar}${barIncomplete}] | ${percentage}% complete! | ETA: ${~~etaHours}h ${~~etaMinutes}m ${~~etaSeconds}s | ${
+          params.value
+        }/${params.total}`
       );
     case "Sent":
       return chalk.green.bgBlack(

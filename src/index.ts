@@ -91,11 +91,18 @@ dotenv.config();
   console.info(chalk.green.bgBlack("Beginning send process..."));
 
   /**
-   * Begin a write stream to log the failed email attempts.
+   * Begin a write stream to create a CSV for failed emails.
    */
   const failedPath = join(__dirname + "/failedEmails.csv");
   const failureStream = createWriteStream(failedPath);
   failureStream.write("email,unsubscribeId\n");
+
+  /**
+   * Begin a write stream to log all API calls
+   */
+  const logPath = join(__dirname + "/emailLog.txt");
+  const logStream = createWriteStream(logPath);
+  logStream.write("Status - Email - Message\n");
 
   /**
    * Run the send function on each email.
@@ -120,15 +127,24 @@ dotenv.config();
     const targetEmail = validList[i];
     if (bouncedList.includes(targetEmail.email)) {
       skippedBar.increment();
+      logStream.write(
+        `SKIPPED - ${targetEmail.email} - Address was in bounce list.\n`
+      );
       continue;
     }
     const status = await sendEmail(configuration, targetEmail, body);
-    if (!status) {
+    if (!status.success) {
       failedBar.increment();
       failureStream.write(
         `${targetEmail.email},${targetEmail.unsubscribeId}\n`
       );
+      logStream.write(
+        `${status.status} - ${status.email} - ${status.logText}\n`
+      );
     } else {
+      logStream.write(
+        `${status.status} - ${status.email} - ${status.logText}\n`
+      );
       sentBar.increment();
     }
   }

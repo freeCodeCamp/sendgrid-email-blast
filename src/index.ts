@@ -102,7 +102,7 @@ dotenv.config();
    */
   const logPath = join(__dirname + "/emailLog.txt");
   const logStream = createWriteStream(logPath);
-  logStream.write("Status - Email - Message");
+  logStream.write("Status - Email - Message\n");
 
   /**
    * Run the send function on each email.
@@ -128,7 +128,7 @@ dotenv.config();
     if (bouncedList.includes(targetEmail.email)) {
       skippedBar.increment();
       logStream.write(
-        `SKIPPED - ${targetEmail.email} - Address was in bounce list.`
+        `SKIPPED - ${targetEmail.email} - Address was in bounce list.\n`
       );
       continue;
     }
@@ -138,9 +138,13 @@ dotenv.config();
       failureStream.write(
         `${targetEmail.email},${targetEmail.unsubscribeId}\n`
       );
-      logStream.write(`${status.status} - ${status.email} - ${status.logText}`);
+      logStream.write(
+        `${status.status} - ${status.email} - ${status.logText}\n`
+      );
     } else {
-      logStream.write(`${status.status} - ${status.email} - ${status.logText}`);
+      logStream.write(
+        `${status.status} - ${status.email} - ${status.logText}\n`
+      );
       sentBar.increment();
     }
   }

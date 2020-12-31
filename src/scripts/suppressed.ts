@@ -5,6 +5,7 @@ import { ClientRequest } from "@sendgrid/client/src/request";
 import { config } from "dotenv";
 import { blockInt, bounceInt, spamInt } from "../interfaces/suppressedInt";
 import ora from "ora";
+import chalk from "chalk";
 
 config();
 
@@ -33,6 +34,10 @@ const getBlocked = async () => {
     });
   } catch (err) {
     console.error(err);
+    console.error(
+      chalk.red.bgBlack("Failed to get blocked emails. Terminating process.")
+    );
+    process.exit(1);
   }
 };
 
@@ -54,6 +59,10 @@ const getBounced = async () => {
     });
   } catch (err) {
     console.error(err);
+    console.error(
+      chalk.red.bgBlack("Failed to get bounced emails. Terminating process.")
+    );
+    process.exit(1);
   }
 };
 
@@ -75,17 +84,29 @@ const getSpam = async () => {
     });
   } catch (err) {
     console.error(err);
+    console.error(
+      chalk.red.bgBlack(
+        "Failed to get spam report emails. Terminating process."
+      )
+    );
+    process.exit(1);
   }
 };
 
-(async () => {
-  const blockedSpinner = ora("Fetching blocked emails...").start();
+export const fetchSuppressedEmails = async (): Promise<void> => {
+  const blockedSpinner = ora(
+    chalk.cyan.bgBlack("Fetching blocked emails...")
+  ).start();
   await getBlocked();
-  blockedSpinner.succeed("Blocked emails obtained!");
-  const bouncedSpinner = ora("Fetching bounced emails...").start();
+  blockedSpinner.succeed(chalk.green.bgBlack("Blocked emails obtained!"));
+  const bouncedSpinner = ora(
+    chalk.cyan.bgBlack("Fetching bounced emails...")
+  ).start();
   await getBounced();
-  bouncedSpinner.succeed("Bounced emails obtained!");
-  const spamSpinner = ora("Fetching spam reports...").start();
+  bouncedSpinner.succeed(chalk.green.bgBlack("Bounced emails obtained!"));
+  const spamSpinner = ora(
+    chalk.cyan.bgBlack("Fetching spam reports...")
+  ).start();
   await getSpam();
-  spamSpinner.succeed("Spam reports obtained!");
-})();
+  spamSpinner.succeed(chalk.green.bgBlack("Spam reports obtained!"));
+};

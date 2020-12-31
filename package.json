@@ -6,8 +6,6 @@
   "scripts": {
     "build": "tsc",
     "db:seed": "node ./prod/scripts/seed.js",
-    "email:suppressed": "node ./prod/scripts/suppressed.js",
-    "email:fetch": "node ./prod/scripts/fetch.js",
     "lint": "eslint ./src/",
     "start": "node ./prod/index.js"
   },

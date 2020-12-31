@@ -11,6 +11,8 @@ import { getBounced } from "./modules/getBounced";
 import { getEnv } from "./modules/getEnv";
 import { getValid } from "./modules/getValid";
 import { sendEmail } from "./modules/sendEmail";
+import { fetchDatabaseEmails } from "./scripts/fetch";
+import { fetchSuppressedEmails } from "./scripts/suppressed";
 import { barFormatter } from "./tools/barFormatter";
 dotenv.config();
 
@@ -31,6 +33,39 @@ dotenv.config();
    * Set the SendGrid API key
    */
   setApiKey(configuration.apiKey);
+
+  /**
+   * Prompt to fetch emails from DB
+   */
+  const getEmailsFromDatabase = await prompt([
+    {
+      name: "confirmed",
+      message: chalk.cyan.bgBlack(
+        "Do you want to fetch the email list from your database?"
+      ),
+      type: "confirm",
+    },
+  ]);
+  if (getEmailsFromDatabase.confirmed) {
+    await fetchDatabaseEmails();
+  }
+
+  /**
+   * Prompt to fetch suppressed emails
+   */
+  const getSuppressedEmails = await prompt([
+    {
+      name: "confirmed",
+      message: chalk.cyan.bgBlack(
+        "Do you want to get the list of suppressed emails from SendGrid?"
+      ),
+      type: "confirm",
+    },
+  ]);
+
+  if (getSuppressedEmails.confirmed) {
+    await fetchSuppressedEmails();
+  }
 
   /**
    * Get the body of the email

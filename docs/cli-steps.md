@@ -8,13 +8,21 @@ The tool will begin by validating your environment variables. If you are missing
 
 ![env validation](./validation.png)
 
+## Fetch Emails
+
+The tool will prompt you to fetch the emails from the database. If you choose yes, it will connect to the database and pull all emails using the `scripts/fetch.ts` script. If you decline, it will move on.
+
+## Fetch Suppressed
+
+The tool will prompt you to fetch the suppressions (bounced emails, blocked emails, and spam reports) through the SendGrid API. If you choose yes, the tool will query those three endpoints. If you choose no, the tool will move on.
+
 ## Reading the Body
 
 Within your `emailBody.txt` should be the full contents of the email you want to send. The tool will attempt to read that file. If there are any errors, the tool will log a failure message and terminate the process.
 
 ## Test Email
 
-You will be prompted to send a test email. If you choose `N`, the tool will move on to the next step. 
+You will be prompted to send a test email. If you choose `N`, the tool will move on to the next step.
 
 ```diff
 - NOTE: Skipping the test email is NOT recommended.
@@ -26,7 +34,7 @@ If you choose `Y`, you will be prompted to provide an email address to send a te
 
 ## Bounced Emails
 
-If you confirmed that the test email was correct (or skipped the test email), the tool reads the `bouncedEmails.csv` file to check if you have documented any bouncing email addresses. If there is an error with parsing the file, the tool will log a failure message and exit the process. If the list is empty, the tool will prompt you to confirm that list *should* be empty. Answering `N` here will terminate the process so you can confirm the contents of your file.
+If you confirmed that the test email was correct (or skipped the test email), the tool reads the `bouncedEmails.csv` file to check if you have documented any bouncing email addresses. If there is an error with parsing the file, the tool will log a failure message and exit the process. If the list is empty, the tool will prompt you to confirm that list _should_ be empty. Answering `N` here will terminate the process so you can confirm the contents of your file.
 
 ![bounce confirmation](./bounced.png)
 

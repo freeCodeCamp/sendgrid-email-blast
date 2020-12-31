@@ -27,7 +27,16 @@ const getBlocked = async () => {
       url: "/v3/suppression/blocks",
     };
 
-    const [_, body] = await client.request(request);
+    const [response, body] = await client.request(request);
+
+    if (response.statusCode !== 200) {
+      console.error(
+        chalk.red.bgBlack(
+          "API call for blocked emails was rejected. Terminating process."
+        )
+      );
+      process.exit(1);
+    }
 
     body.forEach((object: blockInt) => {
       writeStream.write(object.email + "\n");
@@ -52,7 +61,16 @@ const getBounced = async () => {
       url: "/v3/suppression/bounces",
     };
 
-    const [_, body] = await client.request(request);
+    const [response, body] = await client.request(request);
+
+    if (response.statusCode !== 200) {
+      console.error(
+        chalk.red.bgBlack(
+          "API call for bounced emails was rejected. Terminating process."
+        )
+      );
+      process.exit(1);
+    }
 
     body.forEach((object: bounceInt) => {
       writeStream.write(object.email + "\n");
@@ -77,7 +95,16 @@ const getSpam = async () => {
       url: "/v3/suppression/spam_reports",
     };
 
-    const [_, body] = await client.request(request);
+    const [response, body] = await client.request(request);
+
+    if (response.statusCode !== 200) {
+      console.error(
+        chalk.red.bgBlack(
+          "API call for spam reports was rejected. Terminating process."
+        )
+      );
+      process.exit(1);
+    }
 
     body.forEach((object: spamInt) => {
       writeStream.write(object.email + "\n");

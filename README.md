@@ -31,29 +31,14 @@ You will also need to configure your environment variables. You can copy the `sa
 - `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender or verified domain before emails can be sent.
 - `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.
 
-## Generating an Email List
-
-Provided you have connected a database through the environment variables, you can have the tool fetch the documents from that database and parse the documents into `email,unsubscribeId` pairs. The script will validate the email addresses and only save valid email accounts. 
-
-```diff
-! NOTE: This tool was built for freeCodeCamp, and thus relies
-! on some specific values to be present in the database schema.
-```
-
-```bash
-npm run email:fetch
-```
-
-This will grab the user data from the database and write the `email` and `unsubscribeId` fields to the `validEmails.csv` file.
-
 ## Create other files
 
 Within your `prod` directory, you will need to ensure the presence of the following files:
 
-- `bouncedEmails.csv`: This is a file to track your bounced email addresses (to avoid sending to them again). Create this with a line that contains `email`. _You will need to create this manually_.
-- `validEmails.csv`: This is the file containing the list of email + unsubscribeId values to send the emails to. The `fetch` script will create this.
+- `bouncedEmails.csv`: This is a file to track your bounced email addresses (to avoid sending to them again). The CLI will create this.
+- `validEmails.csv`: This is the file containing the list of email + unsubscribeId values to send the emails to. This must be created manually.
 - `failedEmails.csv`: This is the file containing the list of errored emails from a send request. The `send` script will create this.
-- `emailBody.txt`: This is the file containing the plain-text body of your email to send.
+- `emailBody.txt`: This is the file containing the plain-text body of your email to send. This must be created manually.
 
 ## Sending your email!
 

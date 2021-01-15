@@ -84,9 +84,6 @@ dotenv.config();
   const emailTotal = validList.length;
 
   if (!validList.length) {
-    console.error(
-      chalk.red.bgBlack("No email addresses found. Check your validEmails.csv")
-    );
     return;
   }
 

@@ -15,7 +15,9 @@ export const getValid = async (): Promise<EmailInt[]> => {
 
   const filePath = join(__dirname + "/../validEmails.csv");
 
-  const validListString = await readFile(filePath, "utf8");
+  const validListString = await readFile(filePath, "utf8").catch(() => {
+    spinner.fail(chalk.red.bgBlack("validEmails.csv not found!"));
+  });
 
   if (!validListString || !validListString.length) {
     spinner.fail(

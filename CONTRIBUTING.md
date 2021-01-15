@@ -23,17 +23,6 @@ SENDGRID_FROM="Email address to send emails FROM"
 MAIL_SUBJECT="Weekly Update!"
 ```
 
-Additionally, if you are working with the database functionality, you will need to configure that as well.
-
-```py
-# These values are only needed for the fetch and seed scripts.
-# If you are loading your email csv manually, you may skip these.
-MONGO_URI="Your MongoDB connection string"
-MONGO_DB="MongoDB database name"
-MONGO_USER="MongoDB database username"
-MONGO_PASSWORD="MongoDB database password"
-```
-
 ## Claiming an Issue
 
 All of our issues are open to contributors! If you see an open issue you would like to work on, please comment on the issue so we may assign it to you. 

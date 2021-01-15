@@ -27,10 +27,6 @@ The compiled files will be saved in a `prod` directory, which `git` will not tra
 
 You will also need to configure your environment variables. You can copy the `sample.env` to a `.env` file, or create the `.env` file from scratch. Then, set the following values:
 
-- `MONGO_URI`: This is the full connection string for your MongoDB instance.
-- `MONGO_DB`: This is the name of the database to use.
-- `MONGO_USER`: This is the username to use for MongoDB authentication.
-- `MONGO_PASSWORD`: This is the password to use for MongoDB authentication.
 - `SENDGRID_KEY`: This is your SendGrid API key.
 - `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender or verified domain before emails can be sent.
 - `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.

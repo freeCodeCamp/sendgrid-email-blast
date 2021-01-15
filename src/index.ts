@@ -12,7 +12,7 @@ import { getEnv } from "./modules/getEnv";
 import { getValid } from "./modules/getValid";
 import { sendEmail } from "./modules/sendEmail";
 import { fetchDatabaseEmails } from "./scripts/fetch";
-import { fetchSuppressedEmails } from "./scripts/suppressed";
+import { fetchSuppressedEmails } from "./modules/suppressed";
 import { barFormatter } from "./tools/barFormatter";
 dotenv.config();
 

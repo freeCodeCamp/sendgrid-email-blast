@@ -12,10 +12,14 @@ export const getBody = async (): Promise<string> => {
 
   const filePath = join(__dirname + "/../emailBody.txt");
 
-  const emailBody = await readFile(filePath, "utf8");
+  const emailBody = await readFile(filePath, "utf8").catch(() => {
+    spinner.fail(chalk.red.bgBlack("emailBody.txt not found."));
+  });
 
   if (!emailBody || !emailBody.length) {
-    spinner.fail(chalk.red.bgBlack("Could not read email body."));
+    spinner.fail(
+      chalk.red.bgBlack("Could not read email body. Terminating process...")
+    );
     return "";
   }
 

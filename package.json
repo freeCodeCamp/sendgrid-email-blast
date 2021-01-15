@@ -5,7 +5,6 @@
   "main": "./prod/main.js",
   "scripts": {
     "build": "tsc",
-    "db:seed": "node ./prod/scripts/seed.js",
     "lint": "eslint ./src/",
     "start": "node ./prod/index.js"
   },

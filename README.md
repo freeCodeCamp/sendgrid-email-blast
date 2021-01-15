@@ -35,22 +35,6 @@ You will also need to configure your environment variables. You can copy the `sa
 - `SENDGRID_FROM`: This is the email address to send the emails _from_. This needs to be added to your SendGrid account as an authorised sender or verified domain before emails can be sent.
 - `MAIL_SUBJECT`: This is the content to appear in the subject line of the email.
 
-## Seeding the Database
-
-```diff
-- NOTE: This script should only be run if you are working
-- with a development database instance. This WILL inject documents
-- into your database.
-```
-
-To seed some mock data into your database for testing this tool, run the following command:
-
-```bash
-npm run db:seed
-```
-
-This will generate a couple of documents to test this tool against.
-
 ## Generating an Email List
 
 Provided you have connected a database through the environment variables, you can have the tool fetch the documents from that database and parse the documents into `email,unsubscribeId` pairs. The script will validate the email addresses and only save valid email accounts. 

@@ -81,6 +81,7 @@ dotenv.config();
    * Get the list of valid emails.
    */
   const validList = await getValid();
+  const emailTotal = validList.length;
 
   if (!validList.length) {
     console.error(
@@ -89,13 +90,22 @@ dotenv.config();
     return;
   }
 
+  const filteredList = validList.filter(
+    (entry) => !bouncedList.includes(entry.email)
+  );
+  const toSendTotal = filteredList.length;
+
+  const skippedTotal = emailTotal - toSendTotal;
+
   const shouldProceed = await prompt([
     {
       name: "continue",
       message: chalk.cyan.bgBlack(
         `Proceed with sending to ${chalk.yellow.bgBlack(
-          validList.length
-        )} addresses?`
+          toSendTotal
+        )} addresses? ${chalk.yellow.bgBlack(
+          skippedTotal
+        )} entries will be skipped as suppressed.`
       ),
       type: "confirm",
     },
@@ -125,9 +135,6 @@ dotenv.config();
   /**
    * Run the send function on each email.
    */
-
-  const emailTotal = validList.length;
-
   console.info(chalk.magenta.underline.bgBlack("Email Send Progress:"));
 
   const progress = new MultiBar(
@@ -135,21 +142,13 @@ dotenv.config();
     Presets.shades_classic
   );
 
-  const totalBar = progress.create(emailTotal, 0, { task: "Processed" });
-  const sentBar = progress.create(emailTotal, 0, { task: "Sent" });
-  const failedBar = progress.create(emailTotal, 0, { task: "Failed" });
-  const skippedBar = progress.create(emailTotal, 0, { task: "Skipped" });
+  const totalBar = progress.create(toSendTotal, 0, { task: "Processed" });
+  const sentBar = progress.create(toSendTotal, 0, { task: "Sent" });
+  const failedBar = progress.create(toSendTotal, 0, { task: "Failed" });
 
-  for (let i = 0; i < emailTotal; i++) {
+  for (let i = 0; i < toSendTotal; i++) {
     totalBar.increment();
-    const targetEmail = validList[i];
-    if (bouncedList.includes(targetEmail.email)) {
-      skippedBar.increment();
-      logStream.write(
-        `SKIPPED - ${targetEmail.email} - Address was in bounce list.\n`
-      );
-      continue;
-    }
+    const targetEmail = filteredList[i];
     const status = await sendEmail(configuration, targetEmail, body);
     if (!status.success) {
       failedBar.increment();

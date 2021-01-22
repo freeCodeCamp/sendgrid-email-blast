@@ -47,7 +47,7 @@ dotenv.config();
   ]);
 
   if (getSuppressedEmails.confirmed) {
-    await fetchSuppressedEmails();
+    await fetchSuppressedEmails(configuration);
   }
 
   /**

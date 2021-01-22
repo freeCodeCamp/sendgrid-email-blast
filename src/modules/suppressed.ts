@@ -5,8 +5,10 @@ import { ClientRequest } from "@sendgrid/client/src/request";
 import { blockInt, bounceInt, spamInt } from "../interfaces/suppressedInt";
 import ora from "ora";
 import chalk from "chalk";
+import { setApiKey } from "@sendgrid/mail";
 
 export const fetchSuppressedEmails = async (): Promise<void> => {
+  setApiKey(process.env.SENDGRID_KEY || "");
   const filePath = path.join(__dirname + "/../bouncedEmails.csv");
   const writeStream = createWriteStream(filePath);
 

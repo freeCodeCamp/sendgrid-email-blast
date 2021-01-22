@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src/",
-    "start": "node ./prod/index.js"
+    "start": "node -r dotenv/config ./prod/index.js"
   },
   "repository": {
     "type": "git",

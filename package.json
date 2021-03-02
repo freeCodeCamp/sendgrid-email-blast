@@ -1,6 +1,6 @@
 {
   "name": "sendgrid-experiment",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A quick experiment with the SendGrid API",
   "main": "./prod/main.js",
   "scripts": {

@@ -15,7 +15,9 @@ export const getBounced = async (): Promise<string[]> => {
 
   const filePath = join(__dirname + "/../bouncedEmails.csv");
 
-  const bounceListString = await readFile(filePath, "utf8");
+  const bounceListString = await readFile(filePath, "utf8").catch(() => {
+    spinner.fail(chalk.red.bgBlack("bouncedEmails.csv not found."));
+  });
 
   if (!bounceListString || !bounceListString.length) {
     spinner.fail(

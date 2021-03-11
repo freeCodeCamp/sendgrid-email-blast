@@ -20,6 +20,8 @@ export const fetchSuppressedEmails = async (
     try {
       const queryParams = {
         start_time: 1,
+        limit: 500,
+        offset: 0,
       };
       const request: ClientRequest = {
         qs: queryParams,
@@ -27,7 +29,7 @@ export const fetchSuppressedEmails = async (
         url: "/v3/suppression/blocks",
       };
 
-      const [response, body] = await client.request(request);
+      let [response, body] = await client.request(request);
 
       if (response.statusCode !== 200) {
         console.error(
@@ -38,9 +40,22 @@ export const fetchSuppressedEmails = async (
         process.exit(1);
       }
 
+      console.log("Blocked: " + response.headers["x-ratelimit-remaining"]);
+
       body.forEach((object: blockInt) => {
         writeStream.write(object.email + "\n");
       });
+
+      while (body.length) {
+        queryParams.offset += body.length;
+        [response, body] = await client.request(request);
+        console.log("Blocked: " + response.headers["x-ratelimit-remaining"]);
+        if (body.length) {
+          body.forEach((object: blockInt) => {
+            writeStream.write(object.email + "\n");
+          });
+        }
+      }
     } catch (err) {
       console.error(err);
       console.error(
@@ -62,6 +77,8 @@ export const fetchSuppressedEmails = async (
       };
 
       const [response, body] = await client.request(request);
+
+      console.log("Bounced: " + response.headers["x-ratelimit-remaining"]);
 
       if (response.statusCode !== 200) {
         console.error(
@@ -88,6 +105,8 @@ export const fetchSuppressedEmails = async (
     try {
       const queryParams = {
         start_time: 1,
+        limit: 500,
+        offset: 0,
       };
       const request: ClientRequest = {
         qs: queryParams,
@@ -95,7 +114,9 @@ export const fetchSuppressedEmails = async (
         url: "/v3/suppression/spam_reports",
       };
 
-      const [response, body] = await client.request(request);
+      let [response, body] = await client.request(request);
+
+      console.log("Spam: " + response.headers["x-ratelimit-remaining"]);
 
       if (response.statusCode !== 200) {
         console.error(
@@ -109,6 +130,17 @@ export const fetchSuppressedEmails = async (
       body.forEach((object: spamInt) => {
         writeStream.write(object.email + "\n");
       });
+
+      while (body.length) {
+        queryParams.offset += body.length;
+        [response, body] = await client.request(request);
+        console.log("Spam: " + response.headers["x-ratelimit-remaining"]);
+        if (body.length) {
+          body.forEach((object: blockInt) => {
+            writeStream.write(object.email + "\n");
+          });
+        }
+      }
     } catch (err) {
       console.error(err);
       console.error(
@@ -119,6 +151,7 @@ export const fetchSuppressedEmails = async (
       process.exit(1);
     }
   };
+
   const blockedSpinner = ora(
     chalk.cyan.bgBlack("Fetching blocked emails...")
   ).start();

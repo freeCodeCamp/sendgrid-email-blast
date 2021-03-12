@@ -1,7 +1,8 @@
 import chalk from "chalk";
 import { readFile } from "fs-extra";
 import { prompt } from "inquirer";
-import ora from "ora";
+import Spinnies from "spinnies";
+const spinnies = new Spinnies();
 import { join } from "path";
 
 /**
@@ -11,18 +12,25 @@ import { join } from "path";
  * array on failure.
  */
 export const getBounced = async (): Promise<string[]> => {
-  const spinner = ora("Reading bounced email list...");
+  spinnies.add("read-bounced", {
+    color: "cyan",
+    text: "Reading bounced email list...",
+  });
 
   const filePath = join(__dirname + "/../bouncedEmails.csv");
 
   const bounceListString = await readFile(filePath, "utf8").catch(() => {
-    spinner.fail(chalk.red.bgBlack("bouncedEmails.csv not found."));
+    spinnies.fail("read-bounced", {
+      color: "red",
+      text: "bouncedEmails.csv not found.",
+    });
   });
 
   if (!bounceListString || !bounceListString.length) {
-    spinner.fail(
-      chalk.red.bgBlack("Failed to read bounce list. Exiting process...")
-    );
+    spinnies.fail("read-bounced", {
+      color: "red",
+      text: "Failed to read bounce list. Exiting process...",
+    });
     return [];
   }
 
@@ -34,7 +42,10 @@ export const getBounced = async (): Promise<string[]> => {
     // Strip accidental empty lines
     .filter((line) => line);
 
-  spinner.succeed(chalk.green.bgBlack("Bounce list obtained!"));
+  spinnies.succeed("read-bounced", {
+    color: "green",
+    text: "Bounce list obtained!",
+  });
 
   /**
    * In case the bounce list is empty, confirm that is correct and proceed.

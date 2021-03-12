@@ -17,9 +17,7 @@ dotenv.config();
 
 // Anonymous function for IIFE to allow async
 (async function () {
-  console.info(
-    chalk.green.bgBlack(`Hello! Launching email blast application.`)
-  );
+  console.info(chalk.green(`Hello! Launching email blast application.`));
   /**
    * Begin by confirming the environment variables.
    */
@@ -39,7 +37,7 @@ dotenv.config();
   const getSuppressedEmails = await prompt([
     {
       name: "confirmed",
-      message: chalk.cyan.bgBlack(
+      message: chalk.cyan(
         "Do you want to get the list of suppressed emails from SendGrid?"
       ),
       type: "confirm",
@@ -97,10 +95,10 @@ dotenv.config();
   const shouldProceed = await prompt([
     {
       name: "continue",
-      message: chalk.cyan.bgBlack(
-        `Proceed with sending to ${chalk.yellow.bgBlack(
+      message: chalk.cyan(
+        `Proceed with sending to ${chalk.yellow(
           toSendTotal
-        )} addresses? ${chalk.yellow.bgBlack(
+        )} addresses? ${chalk.yellow(
           skippedTotal
         )} entries will be skipped as suppressed.`
       ),
@@ -109,11 +107,11 @@ dotenv.config();
   ]);
 
   if (!shouldProceed.continue) {
-    console.error(chalk.red.bgBlack("Process cancelled. Have a nice day."));
+    console.error(chalk.red("Process cancelled. Have a nice day."));
     return;
   }
 
-  console.info(chalk.green.bgBlack("Beginning send process..."));
+  console.info(chalk.green("Beginning send process..."));
 
   /**
    * Begin a write stream to create a CSV for failed emails.
@@ -132,7 +130,7 @@ dotenv.config();
   /**
    * Run the send function on each email.
    */
-  console.info(chalk.magenta.underline.bgBlack("Email Send Progress:"));
+  console.info(chalk.magenta.underline("Email Send Progress:"));
 
   const progress = new MultiBar(
     { clearOnComplete: false, hideCursor: true, format: barFormatter },
@@ -165,7 +163,5 @@ dotenv.config();
 
   progress.stop();
 
-  console.info(
-    chalk.green.bgBlack("Email blast complete! Have a nice day! :)")
-  );
+  console.info(chalk.green("Email blast complete! Have a nice day! :)"));
 })();

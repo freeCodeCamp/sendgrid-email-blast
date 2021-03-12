@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { readFile } from "fs-extra";
-import ora from "ora";
+import Spinnies from "spinnies";
+const spinnies = new Spinnies();
 import { join } from "path";
 import { EmailInt } from "../interfaces/emailInt";
 
@@ -11,18 +11,25 @@ import { EmailInt } from "../interfaces/emailInt";
  * proper objects.
  */
 export const getValid = async (): Promise<EmailInt[]> => {
-  const spinner = ora(chalk.cyan.bgBlack("Reading valid email list..."));
+  spinnies.add("read-valid", {
+    color: "cyan",
+    text: "Reading valid email list...",
+  });
 
   const filePath = join(__dirname + "/../validEmails.csv");
 
   const validListString = await readFile(filePath, "utf8").catch(() => {
-    spinner.fail(chalk.red.bgBlack("validEmails.csv not found!"));
+    spinnies.fail("read-valid", {
+      color: "red",
+      text: "validEmails.csv not found!",
+    });
   });
 
   if (!validListString || !validListString.length) {
-    spinner.fail(
-      chalk.red.bgBlack("Failed to read valid email list. Exiting process...")
-    );
+    spinnies.fail("read-valid", {
+      color: "red",
+      text: "Failed to read valid email list. Exiting process...",
+    });
     return [];
   }
 
@@ -39,6 +46,9 @@ export const getValid = async (): Promise<EmailInt[]> => {
       return { email, unsubscribeId };
     });
 
-  spinner.succeed(chalk.green.bgBlack("Email list obtained!"));
+  spinnies.succeed("read-valid", {
+    color: "green",
+    text: "Email list obtained!",
+  });
   return validList;
 };

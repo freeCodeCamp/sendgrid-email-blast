@@ -51,7 +51,7 @@
     "dotenv": "^8.2.0",
     "fs-extra": "^9.1.0",
     "inquirer": "^8.0.0",
-    "ora": "^5.3.0"
+    "spinnies": "^0.5.1"
   },
   "lint-staged": {
     "*.ts": [

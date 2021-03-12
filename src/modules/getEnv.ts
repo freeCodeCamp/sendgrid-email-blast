@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { prompt } from "inquirer";
-import ora from "ora";
+import Spinnies from "spinnies";
+const spinnies = new Spinnies();
 import { ConfigInt } from "../interfaces/configInt";
 
 /**
@@ -19,27 +20,39 @@ export const getEnv = async (): Promise<ConfigInt> => {
   /**
    * Start a spinner for this process.
    */
-  const envCheck = ora(chalk.cyan.bgBlack("Validating ENV")).start();
+  spinnies.add("env-check", {
+    color: "cyan",
+    text: "Validating .env",
+  });
 
   /**
    * Checks that all required environment variables are present!
    */
   if (!process.env.SENDGRID_KEY) {
-    envCheck.fail(chalk.red.bgBlack("Missing SendGrid API key!"));
+    spinnies.fail("env-check", {
+      color: "red",
+      text: "Missing SendGrid API key!",
+    });
     return results;
   }
   results.apiKey = process.env.SENDGRID_KEY;
 
   const fromAddress = process.env.SENDGRID_FROM;
   if (!fromAddress) {
-    envCheck.fail(chalk.red.bgBlack("Missing sender email address!"));
+    spinnies.fail("env-check", {
+      color: "red",
+      text: "Missing sender email address!",
+    });
     return results;
   }
   results.fromAddress = fromAddress;
 
   results.subject = process.env.MAIL_SUBJECT || "Weekly Update";
 
-  envCheck.succeed(chalk.green.bgBlack("Environment Variables Validated!"));
+  spinnies.succeed("env-check", {
+    color: "green",
+    text: "Environment variables validated!",
+  });
   /**
    * Prompts the user for manual confirmation of email and subject fields.
    */

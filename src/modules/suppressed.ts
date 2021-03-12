@@ -3,8 +3,22 @@ import path from "path";
 import client from "@sendgrid/client";
 import { ClientRequest } from "@sendgrid/client/src/request";
 import { blockInt, bounceInt, spamInt } from "../interfaces/suppressedInt";
-import ora from "ora";
-import chalk from "chalk";
+import Spinnies from "spinnies";
+const spinnies = new Spinnies({
+  spinner: {
+    interval: 80,
+    frames: [
+      "▰▱▱▱▱▱▱",
+      "▰▰▱▱▱▱▱",
+      "▰▰▰▱▱▱▱",
+      "▰▰▰▰▱▱▱",
+      "▰▰▰▰▰▱▱",
+      "▰▰▰▰▰▰▱",
+      "▰▰▰▰▰▰▰",
+      "▰▱▱▱▱▱▱",
+    ],
+  },
+});
 import { ConfigInt } from "../interfaces/configInt";
 
 export const fetchSuppressedEmails = async (
@@ -17,6 +31,10 @@ export const fetchSuppressedEmails = async (
   writeStream.write("email\n");
 
   const getBlocked = async () => {
+    spinnies.add("get-blocked", {
+      color: "cyan",
+      text: "Getting blocked emails...",
+    });
     try {
       const queryParams = {
         start_time: 1,
@@ -32,15 +50,19 @@ export const fetchSuppressedEmails = async (
       let [response, body] = await client.request(request);
 
       if (response.statusCode !== 200) {
-        console.error(
-          chalk.red.bgBlack(
-            "API call for blocked emails was rejected. Terminating process."
-          )
-        );
+        spinnies.fail("get-blocked", {
+          color: "red",
+          text:
+            "API call for blocked emails was rejected. Terminating process.",
+        });
         process.exit(1);
       }
 
-      console.log("Blocked: " + response.headers["x-ratelimit-remaining"]);
+      spinnies.update("get-blocked", {
+        text: `Getting blocked emails ${queryParams.offset} through ${
+          queryParams.offset + 500
+        }. Rate limit at ${response.headers["x-ratelimit-remaining"]}`,
+      });
 
       body.forEach((object: blockInt) => {
         writeStream.write(object.email + "\n");
@@ -49,7 +71,11 @@ export const fetchSuppressedEmails = async (
       while (body.length) {
         queryParams.offset += body.length;
         [response, body] = await client.request(request);
-        console.log("Blocked: " + response.headers["x-ratelimit-remaining"]);
+        spinnies.update("get-blocked", {
+          text: `Getting blocked emails ${queryParams.offset} through ${
+            queryParams.offset + 500
+          }. Rate limit at ${response.headers["x-ratelimit-remaining"]}`,
+        });
         if (body.length) {
           body.forEach((object: blockInt) => {
             writeStream.write(object.email + "\n");
@@ -58,14 +84,23 @@ export const fetchSuppressedEmails = async (
       }
     } catch (err) {
       console.error(err);
-      console.error(
-        chalk.red.bgBlack("Failed to get blocked emails. Terminating process.")
-      );
+      spinnies.fail("get-blocked", {
+        color: "red",
+        text: "Failed to get blocked emails. Terminating process.",
+      });
       process.exit(1);
     }
+    spinnies.succeed("get-blocked", {
+      color: "green",
+      text: "Blocked emails obtained!",
+    });
   };
 
   const getBounced = async () => {
+    spinnies.add("get-bounced", {
+      color: "cyan",
+      text: "Getting bounced emails...",
+    });
     try {
       const queryParams = {
         start_time: 1,
@@ -78,14 +113,16 @@ export const fetchSuppressedEmails = async (
 
       const [response, body] = await client.request(request);
 
-      console.log("Bounced: " + response.headers["x-ratelimit-remaining"]);
+      spinnies.update("get-bounced", {
+        text: `Getting bounced emails. Rate limit at ${response.headers["x-ratelimit-remaining"]}`,
+      });
 
       if (response.statusCode !== 200) {
-        console.error(
-          chalk.red.bgBlack(
-            "API call for bounced emails was rejected. Terminating process."
-          )
-        );
+        spinnies.fail("get-bounced", {
+          color: "red",
+          text:
+            "API call for bounced emails was rejected. Terminating process.",
+        });
         process.exit(1);
       }
 
@@ -94,14 +131,23 @@ export const fetchSuppressedEmails = async (
       });
     } catch (err) {
       console.error(err);
-      console.error(
-        chalk.red.bgBlack("Failed to get bounced emails. Terminating process.")
-      );
+      spinnies.fail("get-bounced", {
+        color: "red",
+        text: "Failed to get bounced emails. Terminating process.",
+      });
       process.exit(1);
     }
+    spinnies.succeed("get-bounced", {
+      color: "green",
+      text: "Got bounced emails!",
+    });
   };
 
   const getSpam = async () => {
+    spinnies.add("get-spam", {
+      color: "cyan",
+      text: "Getting spam emails...",
+    });
     try {
       const queryParams = {
         start_time: 1,
@@ -116,14 +162,17 @@ export const fetchSuppressedEmails = async (
 
       let [response, body] = await client.request(request);
 
-      console.log("Spam: " + response.headers["x-ratelimit-remaining"]);
+      spinnies.update("get-spam", {
+        text: `Getting spam emails ${queryParams.offset} through ${
+          queryParams.offset + 500
+        }. Rate limit at ${response.headers["x-ratelimit-remaining"]}`,
+      });
 
       if (response.statusCode !== 200) {
-        console.error(
-          chalk.red.bgBlack(
-            "API call for spam reports was rejected. Terminating process."
-          )
-        );
+        spinnies.fail("get-spam", {
+          color: "red",
+          text: "API call for spam emails was rejected. Terminating process.",
+        });
         process.exit(1);
       }
 
@@ -134,7 +183,11 @@ export const fetchSuppressedEmails = async (
       while (body.length) {
         queryParams.offset += body.length;
         [response, body] = await client.request(request);
-        console.log("Spam: " + response.headers["x-ratelimit-remaining"]);
+        spinnies.update("get-spam", {
+          text: `Getting spam emails ${queryParams.offset} through ${
+            queryParams.offset + 500
+          }. Rate limit at ${response.headers["x-ratelimit-remaining"]}`,
+        });
         if (body.length) {
           body.forEach((object: blockInt) => {
             writeStream.write(object.email + "\n");
@@ -143,28 +196,21 @@ export const fetchSuppressedEmails = async (
       }
     } catch (err) {
       console.error(err);
-      console.error(
-        chalk.red.bgBlack(
-          "Failed to get spam report emails. Terminating process."
-        )
-      );
+      spinnies.fail("get-spam", {
+        color: "red",
+        text: "Failed to get spam report emails. Terminating process.",
+      });
       process.exit(1);
     }
+    spinnies.succeed("get-spam", {
+      color: "green",
+      text: "Got spam emails!",
+    });
   };
 
-  const blockedSpinner = ora(
-    chalk.cyan.bgBlack("Fetching blocked emails...")
-  ).start();
   await getBlocked();
-  blockedSpinner.succeed(chalk.green.bgBlack("Blocked emails obtained!"));
-  const bouncedSpinner = ora(
-    chalk.cyan.bgBlack("Fetching bounced emails...")
-  ).start();
+
   await getBounced();
-  bouncedSpinner.succeed(chalk.green.bgBlack("Bounced emails obtained!"));
-  const spamSpinner = ora(
-    chalk.cyan.bgBlack("Fetching spam reports...")
-  ).start();
+
   await getSpam();
-  spamSpinner.succeed(chalk.green.bgBlack("Spam reports obtained!"));
 };

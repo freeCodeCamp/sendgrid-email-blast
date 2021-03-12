@@ -1,6 +1,21 @@
 import chalk from "chalk";
 import { prompt } from "inquirer";
-import ora from "ora";
+import Spinnies from "spinnies";
+const spinnies = new Spinnies({
+  spinner: {
+    interval: 80,
+    frames: [
+      "▰▱▱▱▱▱▱",
+      "▰▰▱▱▱▱▱",
+      "▰▰▰▱▱▱▱",
+      "▰▰▰▰▱▱▱",
+      "▰▰▰▰▰▱▱",
+      "▰▰▰▰▰▰▱",
+      "▰▰▰▰▰▰▰",
+      "▰▱▱▱▱▱▱",
+    ],
+  },
+});
 import { ConfigInt } from "../interfaces/configInt";
 import { EmailInt } from "../interfaces/emailInt";
 import { sendEmail } from "./sendEmail";
@@ -41,7 +56,10 @@ export const emailTest = async (
     },
   ]);
 
-  const spinner = ora(chalk.cyan.bgBlack("Sending test email...")).start();
+  spinnies.add("test-email", {
+    color: "cyan",
+    text: "Sending test email...",
+  });
 
   const testEmailObject: EmailInt = {
     email: testAddress.test_address,
@@ -51,15 +69,17 @@ export const emailTest = async (
   const success = await sendEmail(config, testEmailObject, body);
 
   if (!success) {
-    spinner.fail(chalk.red.bgBlack("Failed to send test email."));
+    spinnies.fail("test-email", {
+      color: "red",
+      text: "Failed to send test email.",
+    });
     return false;
   }
 
-  spinner.succeed(
-    chalk.green.bgBlack(
-      `Email sent! Please check your ${testEmailObject.email} inbox.`
-    )
-  );
+  spinnies.succeed("test-email", {
+    color: "green",
+    text: `Email sent! Please check your ${testEmailObject.email} inbox.`,
+  });
 
   const didRecieve = await prompt([
     {

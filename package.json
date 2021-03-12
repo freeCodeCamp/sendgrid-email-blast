@@ -1,6 +1,6 @@
 {
   "name": "sendgrid-experiment",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A quick experiment with the SendGrid API",
   "main": "./prod/main.js",
   "scripts": {
@@ -51,7 +51,7 @@
     "dotenv": "^8.2.0",
     "fs-extra": "^9.1.0",
     "inquirer": "^8.0.0",
-    "ora": "^5.3.0"
+    "spinnies": "^0.5.1"
   },
   "lint-staged": {
     "*.ts": [

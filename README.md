@@ -2,7 +2,7 @@
 
 This is a Node.js tool to send email blasts through the SendGrid API. Use of this tool is done entirely through the CLI.
 
-# Using the Tool
+## Using the Tool
 
 Using this tool will require an initial setup.
 
@@ -37,7 +37,7 @@ Within your `prod` directory, you will need to ensure the presence of the follow
 - `failedEmails.csv`: This is the file containing the list of errored emails from a send request. The `send` script will create this.
 - `emailBody.txt`: This is the file containing the plain-text body of your email to send. This must be created manually.
 
-## Sending your email!
+## Sending your email
 
 To send your email to the `validEmails.csv` list, run:
 

@@ -5,7 +5,7 @@ import { sendReportInt } from "../interfaces/sendReportInt";
 
 /**
  * Sends an email with the passed configuration and body to the passed email address.
- * Replaces the {{{unsubscribeId}}} body string with the email's actual unsubscribeId.
+ * Replaces the {{unsubscribeId}} body string with the email's actual unsubscribeId.
  * @param {ConfigInt} config The configuration object from getEnv
  * @param {EmailInt} email The email and unsubscribeId to send to
  * @param {string} body The email body text from emailBody.txt
@@ -34,7 +34,7 @@ export const sendEmail = async (
     to: email.email,
     from: config.fromAddress,
     subject: config.subject,
-    text: body.replace("{{{unsubscribeId}}}", email.unsubscribeId),
+    text: body.replace("{{unsubscribeId}}", email.unsubscribeId),
     trackingSettings: {
       clickTracking: {
         enable: false,

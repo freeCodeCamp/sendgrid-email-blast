@@ -1,7 +1,21 @@
 import chalk from "chalk";
 import { prompt } from "inquirer";
 import Spinnies from "spinnies";
-const spinnies = new Spinnies();
+const spinnies = new Spinnies({
+  spinner: {
+    interval: 80,
+    frames: [
+      "▰▱▱▱▱▱▱",
+      "▰▰▱▱▱▱▱",
+      "▰▰▰▱▱▱▱",
+      "▰▰▰▰▱▱▱",
+      "▰▰▰▰▰▱▱",
+      "▰▰▰▰▰▰▱",
+      "▰▰▰▰▰▰▰",
+      "▰▱▱▱▱▱▱",
+    ],
+  },
+});
 import { ConfigInt } from "../interfaces/configInt";
 import { EmailInt } from "../interfaces/emailInt";
 import { sendEmail } from "./sendEmail";

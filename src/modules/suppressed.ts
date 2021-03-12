@@ -4,7 +4,21 @@ import client from "@sendgrid/client";
 import { ClientRequest } from "@sendgrid/client/src/request";
 import { blockInt, bounceInt, spamInt } from "../interfaces/suppressedInt";
 import Spinnies from "spinnies";
-const spinnies = new Spinnies();
+const spinnies = new Spinnies({
+  spinner: {
+    interval: 80,
+    frames: [
+      "▰▱▱▱▱▱▱",
+      "▰▰▱▱▱▱▱",
+      "▰▰▰▱▱▱▱",
+      "▰▰▰▰▱▱▱",
+      "▰▰▰▰▰▱▱",
+      "▰▰▰▰▰▰▱",
+      "▰▰▰▰▰▰▰",
+      "▰▱▱▱▱▱▱",
+    ],
+  },
+});
 import { ConfigInt } from "../interfaces/configInt";
 
 export const fetchSuppressedEmails = async (

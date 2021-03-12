@@ -1,6 +1,20 @@
 import { readFile } from "fs-extra";
 import Spinnies from "spinnies";
-const spinnies = new Spinnies();
+const spinnies = new Spinnies({
+  spinner: {
+    interval: 80,
+    frames: [
+      "▰▱▱▱▱▱▱",
+      "▰▰▱▱▱▱▱",
+      "▰▰▰▱▱▱▱",
+      "▰▰▰▰▱▱▱",
+      "▰▰▰▰▰▱▱",
+      "▰▰▰▰▰▰▱",
+      "▰▰▰▰▰▰▰",
+      "▰▱▱▱▱▱▱",
+    ],
+  },
+});
 import { join } from "path";
 import { EmailInt } from "../interfaces/emailInt";
 

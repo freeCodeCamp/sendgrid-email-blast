@@ -73,27 +73,27 @@ export const getEnv = async (): Promise<ConfigInt> => {
   const validateEnv = await prompt([
     {
       type: "confirm",
-      message: chalk.cyan.bgBlack(
-        `Is ${chalk.yellow.bgBlack(fromAddress)} the correct email address?`
+      message: chalk.cyan(
+        `Is ${chalk.yellow(fromAddress)} the correct email address?`
       ),
       name: "email_valid",
     },
     {
       type: "confirm",
-      message: chalk.cyan.bgBlack(
-        `Is ${chalk.yellow.bgBlack(results.subject)} the correct subject line?`
+      message: chalk.cyan(
+        `Is ${chalk.yellow(results.subject)} the correct subject line?`
       ),
       name: "subject_valid",
     },
   ]);
 
   if (!validateEnv.email_valid) {
-    console.info(chalk.red.bgBlack("Email is incorrect. Exiting process..."));
+    console.info(chalk.red("Email is incorrect. Exiting process..."));
     return results;
   }
 
   if (!validateEnv.subject_valid) {
-    console.info(chalk.red.bgBlack("Subject is incorrect. Exiting process..."));
+    console.info(chalk.red("Subject is incorrect. Exiting process..."));
     return results;
   }
 

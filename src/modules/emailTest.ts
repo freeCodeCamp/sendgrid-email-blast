@@ -36,7 +36,7 @@ export const emailTest = async (
     {
       name: "should_test",
       type: "confirm",
-      message: chalk.cyan.bgBlack("Do you want to send a test email?"),
+      message: chalk.cyan("Do you want to send a test email?"),
     },
   ]);
 
@@ -52,7 +52,7 @@ export const emailTest = async (
     {
       name: "test_address",
       type: "input",
-      message: chalk.cyan.bgBlack("Please enter your test address"),
+      message: chalk.cyan("Please enter your test address"),
     },
   ]);
 
@@ -85,16 +85,16 @@ export const emailTest = async (
     {
       name: "got_email",
       type: "confirm",
-      message: chalk.cyan.bgBlack("Did you receive the email? Is it correct?"),
+      message: chalk.cyan("Did you receive the email? Is it correct?"),
     },
   ]);
 
   if (!didRecieve.got_email) {
     console.error(
-      chalk.red.bgBlack("Test email unsuccessful. Exiting process...")
+      chalk.red("Test email unsuccessful. Exiting process...")
     );
     return false;
   }
-  console.info(chalk.green.bgBlack("Test email succeeded!"));
+  console.info(chalk.green("Test email succeeded!"));
   return true;
 };

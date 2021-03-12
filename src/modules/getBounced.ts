@@ -69,7 +69,7 @@ export const getBounced = async (): Promise<string[]> => {
       {
         name: "proceed",
         type: "confirm",
-        message: chalk.yellow.bgBlack(
+        message: chalk.yellow(
           "The bounced email list is empty. Proceed with sending anyway?"
         ),
       },
@@ -77,11 +77,11 @@ export const getBounced = async (): Promise<string[]> => {
 
     if (!shouldProceed.proceed) {
       console.error(
-        chalk.red.bgBlack("Bounce list should not be empty. Exiting process...")
+        chalk.red("Bounce list should not be empty. Exiting process...")
       );
       return [];
     }
-    console.info(chalk.green.bgBlack("Bounce list confirmed. Proceeding!"));
+    console.info(chalk.green("Bounce list confirmed. Proceeding!"));
     return ["thisisverymuchafakeemail@nope.txt"];
   }
 

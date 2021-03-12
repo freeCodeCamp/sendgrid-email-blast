@@ -22,21 +22,21 @@ export const barFormatter = (
   const etaSeconds = (etaTime - etaHours - etaMinutes) % 60;
   switch (payload.task) {
     case "Processed":
-      return chalk.cyan.bgBlack(
+      return chalk.cyan(
         `Processed: [${bar}${barIncomplete}] | ${percentage}% complete! | ETA: ${~~etaHours}h ${~~etaMinutes}m ${~~etaSeconds}s | ${
           params.value
         }/${params.total}`
       );
     case "Sent":
-      return chalk.green.bgBlack(
+      return chalk.green(
         `     Sent: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
     case "Failed":
-      return chalk.red.bgBlack(
+      return chalk.red(
         `   Failed: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
     case "Skipped":
-      return chalk.yellow.bgBlack(
+      return chalk.yellow(
         `  Skipped: [${bar}${barIncomplete}] | ${percentage}% of processed emails | ${params.value}`
       );
   }

@@ -90,9 +90,7 @@ export const emailTest = async (
   ]);
 
   if (!didRecieve.got_email) {
-    console.error(
-      chalk.red("Test email unsuccessful. Exiting process...")
-    );
+    console.error(chalk.red("Test email unsuccessful. Exiting process..."));
     return false;
   }
   console.info(chalk.green("Test email succeeded!"));

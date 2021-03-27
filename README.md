@@ -2,6 +2,12 @@
 
 This is a Node.js tool to send email blasts through the SendGrid API. Use of this tool is done entirely through the CLI.
 
+![](https://img.shields.io/codeclimate/maintainability/nhcarrigan/sendgrid-email-blast)
+![](https://img.shields.io/codeclimate/issues/nhcarrigan/sendgrid-email-blast)
+![](https://img.shields.io/codeclimate/tech-debt/nhcarrigan/sendgrid-email-blast)
+![](https://img.shields.io/lgtm/alerts/github/nhcarrigan/sendgrid-email-blast)
+![](https://img.shields.io/lgtm/grade/javascript/github/nhcarrigan/sendgrid-email-blast)
+
 ## Using the Tool
 
 Using this tool will require an initial setup.

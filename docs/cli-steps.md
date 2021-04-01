@@ -8,10 +8,6 @@ The tool will begin by validating your environment variables. If you are missing
 
 ![env validation](./validation.png)
 
-## Fetch Emails
-
-The tool will prompt you to fetch the emails from the database. If you choose yes, it will connect to the database and pull all emails using the `scripts/fetch.ts` script. If you decline, it will move on.
-
 ## Fetch Suppressed
 
 The tool will prompt you to fetch the suppressions (bounced emails, blocked emails, and spam reports) through the SendGrid API. If you choose yes, the tool will query those three endpoints. If you choose no, the tool will move on.
@@ -24,9 +20,7 @@ Within your `emailBody.txt` should be the full contents of the email you want to
 
 You will be prompted to send a test email. If you choose `N`, the tool will move on to the next step.
 
-```diff
-- NOTE: Skipping the test email is NOT recommended.
-```
+> NOTE: Skipping the test email is NOT recommended.
 
 If you choose `Y`, you will be prompted to provide an email address to send a test message to. The tool will send an email with the body you wrote to that address, then ask you for confirmation that the email is correct. Answering `N` here will terminate the process so you can adjust your email body.
 

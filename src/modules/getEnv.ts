@@ -30,6 +30,7 @@ export const getEnv = async (): Promise<ConfigInt> => {
     fromAddress: "",
     subject: "",
     valid: false,
+    unsubscribeAddress: "",
   };
   /**
    * Start a spinner for this process.
@@ -63,6 +64,10 @@ export const getEnv = async (): Promise<ConfigInt> => {
 
   results.subject = process.env.MAIL_SUBJECT || "Weekly Update";
 
+  const unsubscribeAddress = process.env.SENDGRID_UNSUBSCRIBE || fromAddress;
+
+  results.unsubscribeAddress = unsubscribeAddress;
+
   spinnies.succeed("env-check", {
     color: "green",
     text: "Environment variables validated!",
@@ -81,6 +86,15 @@ export const getEnv = async (): Promise<ConfigInt> => {
     {
       type: "confirm",
       message: chalk.cyan(
+        `Is ${chalk.yellow(
+          unsubscribeAddress
+        )} the correct unsubscribe address?`
+      ),
+      name: "unsub_valid",
+    },
+    {
+      type: "confirm",
+      message: chalk.cyan(
         `Is ${chalk.yellow(results.subject)} the correct subject line?`
       ),
       name: "subject_valid",
@@ -94,6 +108,13 @@ export const getEnv = async (): Promise<ConfigInt> => {
 
   if (!validateEnv.subject_valid) {
     console.info(chalk.red("Subject is incorrect. Exiting process..."));
+    return results;
+  }
+
+  if (!validateEnv) {
+    console.info(
+      chalk.red("Unsubscribe address is incorrect. Exiting process...")
+    );
     return results;
   }
 

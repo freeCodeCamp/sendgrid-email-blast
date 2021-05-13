@@ -48,6 +48,9 @@ export const sendEmail = async (
         enable: false,
       },
     },
+    headers: {
+      "List-Unsubscribe": `<mailto:${config.unsubscribeAddress}>`,
+    },
   };
 
   try {

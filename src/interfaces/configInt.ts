@@ -3,4 +3,5 @@ export interface ConfigInt {
   fromAddress: string;
   subject: string;
   valid: boolean;
+  unsubscribeAddress: string;
 }

@@ -52,8 +52,7 @@ export const fetchSuppressedEmails = async (
       if (response.statusCode !== 200) {
         spinnies.fail("get-blocked", {
           color: "red",
-          text:
-            "API call for blocked emails was rejected. Terminating process.",
+          text: "API call for blocked emails was rejected. Terminating process.",
         });
         process.exit(1);
       }
@@ -120,8 +119,7 @@ export const fetchSuppressedEmails = async (
       if (response.statusCode !== 200) {
         spinnies.fail("get-bounced", {
           color: "red",
-          text:
-            "API call for bounced emails was rejected. Terminating process.",
+          text: "API call for bounced emails was rejected. Terminating process.",
         });
         process.exit(1);
       }

@@ -2,6 +2,7 @@ import { MailDataRequired, send } from "@sendgrid/mail";
 import { ConfigInt } from "../interfaces/configInt";
 import { EmailInt } from "../interfaces/emailInt";
 import { sendReportInt } from "../interfaces/sendReportInt";
+import ResponseError from "@sendgrid/helpers/classes/response-error";
 
 /**
  * Sends an email with the passed configuration and body to the passed email address.
@@ -67,12 +68,13 @@ export const sendEmail = async (
       email: email.email,
       logText: `Email successfully sent!`,
     };
-  } catch (err) {
+  } catch (error) {
+    const err = error as ResponseError;
     return {
       status: "ERROR",
       success: false,
       email: email.email || "",
-      logText: `API reported error ${err.errno}: ${err.code}`,
+      logText: `API reported error ${err.code}: ${err.message}`,
     };
   }
 };

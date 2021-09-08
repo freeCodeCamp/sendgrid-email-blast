@@ -1,4 +1,4 @@
-import { setApiKey } from "@sendgrid/mail";
+import sendgrid from "@sendgrid/mail";
 import chalk from "chalk";
 import { MultiBar, Presets } from "cli-progress";
 import dotenv from "dotenv";
@@ -29,7 +29,7 @@ dotenv.config();
   /**
    * Set the SendGrid API key
    */
-  setApiKey(configuration.apiKey);
+  sendgrid.setApiKey(configuration.apiKey);
 
   /**
    * Prompt to fetch suppressed emails
@@ -136,7 +136,7 @@ dotenv.config();
     const targetEmail = validList[i];
     if (bouncedList.includes(targetEmail.email)) {
       skippedBar.increment();
-      logStream.write(`Skipped - ${targetEmail}`);
+      logStream.write(`Skipped - ${targetEmail.email}\n`);
       continue;
     }
     const status = await sendEmail(configuration, targetEmail, body);

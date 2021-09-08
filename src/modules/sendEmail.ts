@@ -1,7 +1,8 @@
-import { MailDataRequired, send } from "@sendgrid/mail";
+import sendgrid, { MailDataRequired } from "@sendgrid/mail";
 import { ConfigInt } from "../interfaces/configInt";
 import { EmailInt } from "../interfaces/emailInt";
 import { sendReportInt } from "../interfaces/sendReportInt";
+import ResponseError from "@sendgrid/helpers/classes/response-error";
 
 /**
  * Sends an email with the passed configuration and body to the passed email address.
@@ -35,7 +36,7 @@ export const sendEmail = async (
     from: config.fromAddress,
     subject: config.subject,
     text: body.replace("{{unsubscribeId}}", email.unsubscribeId),
-    ipPoolName: "Email Blast",
+    //ipPoolName: "Email Blast",
     trackingSettings: {
       clickTracking: {
         enable: false,
@@ -51,7 +52,7 @@ export const sendEmail = async (
   };
 
   try {
-    const success = await send(message);
+    const success = await sendgrid.send(message);
     const successCode = success[0].statusCode;
     if (successCode !== 200 && successCode !== 202) {
       return {
@@ -67,12 +68,13 @@ export const sendEmail = async (
       email: email.email,
       logText: `Email successfully sent!`,
     };
-  } catch (err) {
+  } catch (error) {
+    const err = error as ResponseError;
     return {
       status: "ERROR",
       success: false,
       email: email.email || "",
-      logText: `API reported error ${err.errno}: ${err.code}`,
+      logText: `API reported error ${err.code}: ${err.message}`,
     };
   }
 };

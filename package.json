@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/chai": "4.2.22",
     "@types/cli-progress": "3.9.2",
-    "@types/fs-extra": "9.0.12",
+    "@types/fs-extra": "9.0.13",
     "@types/inquirer": "8.1.2",
     "@types/mocha": "8.2.3",
     "@types/node": "16.7.13",

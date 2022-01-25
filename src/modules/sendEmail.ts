@@ -36,7 +36,7 @@ export const sendEmail = async (
     from: config.fromAddress,
     subject: config.subject,
     text: body.replace("{{unsubscribeId}}", email.unsubscribeId),
-    ipPoolName: "Email Blast",
+    // ipPoolName: "Email Blast",
     trackingSettings: {
       clickTracking: {
         enable: false,

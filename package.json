@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/chai": "4.3.1",
-    "@types/cli-progress": "3.9.2",
+    "@types/cli-progress": "3.11.0",
     "@types/fs-extra": "9.0.13",
     "@types/inquirer": "8.2.1",
     "@types/mocha": "9.1.1",

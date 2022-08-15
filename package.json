@@ -27,7 +27,7 @@
     "@types/chai": "4.3.3",
     "@types/cli-progress": "3.11.0",
     "@types/fs-extra": "9.0.13",
-    "@types/inquirer": "8.2.2",
+    "@types/inquirer": "8.2.3",
     "@types/mocha": "9.1.1",
     "@types/node": "16.11.48",
     "@typescript-eslint/eslint-plugin": "5.33.0",

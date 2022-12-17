@@ -27,7 +27,7 @@
     "@types/chai": "4.3.4",
     "@types/cli-progress": "3.11.0",
     "@types/fs-extra": "9.0.13",
-    "@types/inquirer": "8.2.5",
+    "@types/inquirer": "9.0.3",
     "@types/mocha": "10.0.1",
     "@types/node": "18.11.16",
     "@typescript-eslint/eslint-plugin": "5.46.1",
@@ -50,7 +50,7 @@
     "cli-progress": "^3.9.0",
     "dotenv": "^16.0.0",
     "fs-extra": "^11.0.0",
-    "inquirer": "^8.1.2",
+    "inquirer": "^9.0.0",
     "spinnies": "^0.5.1"
   },
   "lint-staged": {
